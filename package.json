@@ -16,9 +16,10 @@
   "author": "marco.genova@nttdata.com",
   "license": "MIT",
   "dependencies": {
-    "lighthouse": "^4.0.0",
     "axios": "^0.18.0",
     "dotenv": "^6.2.0",
+    "lighthouse": "^4.0.0",
+    "node-storage": "0.0.7",
     "ramda": "^0.26.1"
   },
   "devDependencies": {

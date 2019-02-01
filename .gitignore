@@ -1,6 +1,12 @@
 # Reports
 _reports/*
 
+#local storage
+.local_storage.json
+
+#tmp files for tests
+__tests__/tmp
+
 # Logs
 logs
 *.log

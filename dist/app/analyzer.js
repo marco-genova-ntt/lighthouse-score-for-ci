@@ -27,13 +27,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Lauches Chrome and lighhouse analysis phase
  * 
- * use results.lhr for the JS-consumeable output: see https://github.com/GoogleChrome/lighthouse/blob/master/types/lhr.d.ts
+ * use results.lhr for the JS-consumeable output: @see https://github.com/GoogleChrome/lighthouse/blob/master/types/lhr.d.ts
  * use results.report for the HTML/JSON/CSV output as a string
  * use results.artifacts for the trace/screenshots/other specific case you need (rarer)
- * chrome launcher docs: https://www.npmjs.com/package/chrome-launcher
- * config lighthouse ref: https://github.com/GoogleChrome/lighthouse/blob/888bd6dc9d927a734a8e20ea8a0248baa5b425ed/typings/externs.d.ts#L82-L119
- * lighthouse results: https://github.com/GoogleChrome/lighthouse/blob/master/docs/understanding-results.md
- * chrome configuration: https://github.com/GoogleChrome/lighthouse
+ * chrome launcher docs: @see https://www.npmjs.com/package/chrome-launcher
+ * config lighthouse ref: @see https://github.com/GoogleChrome/lighthouse/blob/888bd6dc9d927a734a8e20ea8a0248baa5b425ed/typings/externs.d.ts#L82-L119
+ * lighthouse results: @see https://github.com/GoogleChrome/lighthouse/blob/master/docs/understanding-results.md
+ * chrome configuration: @see https://github.com/GoogleChrome/lighthouse
  * 
  * @param {*} url url to analyze
  * @param {*} opts chrome options
@@ -50,13 +50,19 @@ function launchChromeAndRunLighthouse(url, config = null, resultManager) {
     }).catch(err => console.error("error during lighthouse execution: %s", err.message));
   });
 }
+/**
+ * Default lighthouse manager to write result on the file system
+ * 
+ * @param {*} results lighthouse results 
+ */
+
 
 function defaultLighthouseManager(results) {
   // Use results
   const html = _reportGenerator.default.generateReportHtml(results);
 
   const basePath = utility.getAbsolutePath(utility.string("REPORT_DIR", "./_reports"));
-  const processID = (0, _v.default)();
+  const processID = utility.getProgressiveCounter();
 
   const filePath = _path.default.join(basePath, `${processID}.html`);
 
