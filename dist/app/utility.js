@@ -9,6 +9,7 @@ exports.bool = bool;
 exports.replace = replace;
 exports.randomInt = randomInt;
 exports.getAbsolutePath = getAbsolutePath;
+exports.getProgressiveCounter = getProgressiveCounter;
 exports.concatAll = void 0;
 
 var R = _interopRequireWildcard(require("ramda"));
@@ -17,10 +18,13 @@ var _process = _interopRequireDefault(require("process"));
 
 var _path = _interopRequireDefault(require("path"));
 
+var _storage = _interopRequireDefault(require("./storage"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
+const store = new _storage.default(getAbsolutePath('.local_storage.json'));
 /**
  * Gets a string environment variable by the given name.
  *
@@ -29,7 +33,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  *
  * @return {String} The value.
  */
-function string(name, defaultVal) {
+
+function string(name, defaultVal = '') {
   return _process.default.env[name] || defaultVal;
 }
 /**
@@ -42,7 +47,7 @@ function string(name, defaultVal) {
  */
 
 
-function number(name, defaultVal) {
+function number(name, defaultVal = 0) {
   return _process.default.env[name] ? parseInt(_process.default.env[name], 10) : defaultVal;
 }
 /**
@@ -55,7 +60,7 @@ function number(name, defaultVal) {
  */
 
 
-function bool(name, defaultVal) {
+function bool(name, defaultVal = false) {
   return _process.default.env[name] ? _process.default.env[name] === 'true' || _process.default.env[name] === '1' : defaultVal;
 }
 /**
@@ -68,7 +73,7 @@ function bool(name, defaultVal) {
  */
 
 
-function replace(phrase, toReplace, withValue) {
+function replace(phrase = '', toReplace = '', withValue = '') {
   return R.replace(`{${toReplace}}`, withValue, phrase);
 }
 /**
@@ -86,7 +91,7 @@ const concatAll = R.unapply(R.reduce(R.concat, ''));
 
 exports.concatAll = concatAll;
 
-function randomInt(low, high) {
+function randomInt(low = 0, high = 100) {
   return Math.floor(Math.random() * (high - low) + low);
 }
 /**
@@ -96,6 +101,18 @@ function randomInt(low, high) {
  */
 
 
-function getAbsolutePath(relativePath) {
-  return _path.default.join(_process.default.cwd(), relativePath ? relativePath : '');
+function getAbsolutePath(relativePath = '') {
+  return _path.default.join(_process.default.cwd(), relativePath);
+}
+/**
+ * Gets a counter of a progressive values among runs.
+ * Parameter is optional an internal store is used
+ * 
+ * @param {StoreManager} specificStore optional store
+ */
+
+
+function getProgressiveCounter(specificStore) {
+  const storeToUse = specificStore ? specificStore : store;
+  return storeToUse.setValueToStorage('COUNTER', R.inc(storeToUse.getValueFromStorage('COUNTER', 0)));
 }
