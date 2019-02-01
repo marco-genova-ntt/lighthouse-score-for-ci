@@ -1,0 +1,9 @@
+{
+    "chromeFlags": [
+        "--print-config",
+        "--headless"
+    ],
+    "emulatedFormFactor": "desktop",
+    "disableDeviceEmulation": false,
+    "throttlingMethod": "simulate"
+}

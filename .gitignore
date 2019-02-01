@@ -1,3 +1,6 @@
+# Reports
+_reports/*
+
 # Logs
 logs
 *.log
