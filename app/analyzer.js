@@ -26,8 +26,8 @@ export function launchChromeAndRunLighthouse(url, config = null, resultManager) 
   return ChromeLauncher.launch({chromeFlags: opts.chromeFlags}).then(chrome => {
     opts.port = chrome.port;
     return lighthouse(url, opts, config).then(results => {
-      return chrome.kill().then(() => results.lhr).catch((err) => console.error("error during analysis phase: %s", err.message));
-    }).catch((err) => console.error("error during lighthouse execution: %s", err.message));
+      return chrome.kill().then(() => results.lhr).catch((err) => console.error("error during analysis phase: %s, [STACK] %s", err.message, err.stack));
+    }).catch((err) => console.error("error during lighthouse execution: %s, [STACK] %s", err.message, err.stack));
   });
 }
 

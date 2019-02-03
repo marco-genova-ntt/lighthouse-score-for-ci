@@ -16,8 +16,6 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
-var _v = _interopRequireDefault(require("uuid/v4"));
-
 var utility = _interopRequireWildcard(require("./utility"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -46,8 +44,8 @@ function launchChromeAndRunLighthouse(url, config = null, resultManager) {
   }).then(chrome => {
     opts.port = chrome.port;
     return (0, _lighthouse.default)(url, opts, config).then(results => {
-      return chrome.kill().then(() => results.lhr).catch(err => console.error("error during analysis phase: %s", err.message));
-    }).catch(err => console.error("error during lighthouse execution: %s", err.message));
+      return chrome.kill().then(() => results.lhr).catch(err => console.error("error during analysis phase: %s, [STACK] %s", err.message, err.stack));
+    }).catch(err => console.error("error during lighthouse execution: %s, [STACK] %s", err.message, err.stack));
   });
 }
 /**

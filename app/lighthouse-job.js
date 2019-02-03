@@ -1,5 +1,14 @@
 import {launchChromeAndRunLighthouse,defaultLighthouseManager} from './analyzer';
+import * as R from 'ramda';
 
-launchChromeAndRunLighthouse('https://www.leroymerlin.it/prodotti/specchi-bagno-CAT35-c')
-	.then(defaultLighthouseManager)
-	.catch((err) => console.error("error during job execution: %s", err.message));
+export function analyze(pages) {
+
+	if (!R.isNil(pages) && R.length(pages) > 0) {
+		const runner = page => launchChromeAndRunLighthouse(page)
+			.then(defaultLighthouseManager)
+			.catch((err) => console.error("error during job execution: %s, [STACK] %s", err.message, err.stack));
+
+		R.forEach(runner, pages);
+	}
+}
+
