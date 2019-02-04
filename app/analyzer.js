@@ -5,16 +5,20 @@ import fs from 'fs';
 import path from 'path';
 import * as utility from './utility';
 import {uploadFile} from './aws-uploader';
+import * as R from 'ramda';
 
 /**
- * Default lighthouse manager to write result on the file system
+ * Default lighthouse manager to write result on the file system.
+ * Executes all managers.
  * 
+ * @param {string} processID identifier of the analysis run
+ * @param {string} page url web page
  * @param {*} results lighthouse results 
+ * @param {Array} chainManagers chain managers to produce reports or dispatch events
  */
-export function defaultLighthouseManager(results) {
+export function defaultLighthouseManager(processID, page, results, chainManagers) {
   const html = ReportGenerator.generateReportHtml(results);
   const basePath = utility.getAbsolutePath(utility.string("REPORT_DIR", "./_reports"));
-  const processID = utility.getProgressiveCounter();
   const keyName = `${processID}.html`;
   const filePath = path.join(basePath, keyName);
   
@@ -37,6 +41,10 @@ export function defaultLighthouseManager(results) {
     fs.writeFileSync(devtoolsFilePath, devtoolshtml, {encoding: 'utf-8'});
   }
 
+  if(chainManagers && R.length(chainManagers)) {
+    const executeManager = x => R.call(x, processID, page, results);
+    R.forEach(executeManager, chainManagers);
+  }
 }
 
 /**
@@ -51,9 +59,10 @@ export function defaultLighthouseManager(results) {
  * chrome configuration: @see https://github.com/GoogleChrome/lighthouse
  *  
  * @param {*} pages web pages to analyze
+ * @param {Array} customManagers custom managers for result management
  * @param {*} config lighhouse configuration
  */
-export async function launchChrome(pages, config = null) {
+export async function launchChrome(pages, customManagers, config = null) {
   let opts = JSON.parse(fs.readFileSync(utility.getAbsolutePath( "./chrome_config.json"), 'utf8'));
   let chrome = await ChromeLauncher.launch({chromeFlags: opts.chromeFlags});
 
@@ -61,8 +70,9 @@ export async function launchChrome(pages, config = null) {
   opts.port = chrome.port;
 
   for (const page of pages) {
+    const processID = utility.getProgressiveCounter();
     let results = await lighthouse(page, opts, config);
-    defaultLighthouseManager(results.lhr);
+    defaultLighthouseManager(processID, page, results.lhr, customManagers);
   }
 
   chrome.kill();

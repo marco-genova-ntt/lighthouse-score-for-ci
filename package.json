@@ -24,6 +24,7 @@
     "axios": "^0.18.0",
     "dotenv": "^6.2.0",
     "lighthouse": "^4.0.0",
+    "lighthouse-score-for-slack": "^0.1.6",
     "node-storage": "0.0.7",
     "ramda": "^0.26.1"
   },
