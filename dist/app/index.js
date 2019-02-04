@@ -14,6 +14,5 @@ _dotenv.default.config({
   path: _path.default.join(process.cwd(), '.env')
 });
 
-const customManagers = [_slackEmitter.dispatchMessageManager]; //analyze(['https://www.leroymerlin.it','https://www.leroymerlin.it/prodotti/specchi-bagno-CAT35-c'], customManagers);
-
-(0, _lighthouseJob.analyze)(['https://www.leroymerlin.it'], customManagers);
+const customManagers = [_slackEmitter.dispatchMessageManager];
+(0, _lighthouseJob.analyze)(['https://www.leroymerlin.it', 'https://www.leroymerlin.it/prodotti/specchi-bagno-CAT35-c'], customManagers);
