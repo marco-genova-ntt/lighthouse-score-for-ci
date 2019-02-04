@@ -89,7 +89,7 @@ The project is ES6-based.
 
 I have create a simple app not distributed (actually) to manage the connection between simple bot and slack workspace. 
 
-![Slack App configured](https://github.com/marco-genova-ntt/lighthouse-score-for-slack/blob/master/assests/img/slack-workspace.png)
+![Slack App configured](https://github.com/marco-genova-ntt/lighthouse-ci/blob/master/assests/img/slack-workspace.png)
 
 Reference to slack guide: https://api.slack.com/slack-apps
 
