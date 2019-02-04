@@ -4,6 +4,7 @@ import * as ChromeLauncher from 'chrome-launcher';
 import fs from 'fs';
 import path from 'path';
 import * as utility from './utility';
+import {uploadFile} from './aws-uploader';
 
 /**
  * Default lighthouse manager to write result on the file system
@@ -11,29 +12,35 @@ import * as utility from './utility';
  * @param {*} results lighthouse results 
  */
 export function defaultLighthouseManager(results) {
-  // Use results
   const html = ReportGenerator.generateReportHtml(results);
   const basePath = utility.getAbsolutePath(utility.string("REPORT_DIR", "./_reports"));
   const processID = utility.getProgressiveCounter();
-  const filePath = path.join(basePath, `${processID}.html`);
+  const keyName = `${processID}.html`;
+  const filePath = path.join(basePath, keyName);
   
-  fs.writeFileSync(filePath, html, {encoding: 'utf-8'});
+  fs.writeFile(filePath, html, {encoding: 'utf-8'}, (err) => {
+    if (err) throw err;
+    
+    if (utility.bool('AWS_S3_WRITING_ENABLED', false)) {
+      const bucketName = utility.string('AWS_BUCKET_NAME');
+      uploadFile(bucketName, keyName, filePath);
+    }
+    
+  });
 
   if (utility.bool("REPORT_EXTRA_STYLE", false)) {
-      // Create Devtools report that's denser
-      // TODO: add in extra styles that devtools manually injects
+    const devtoolshtml = html
+          .replace(`"lh-root lh-vars"`, `"lh-root lh-vars lh-devtools"`)
+          .replace(`<title>Lighthouse Report`, `<title>DevTools Lighthouse Report`)
 
-      const devtoolshtml = html
-              .replace(`"lh-root lh-vars"`, `"lh-root lh-vars lh-devtools"`)
-              .replace(`<title>Lighthouse Report`, `<title>DevTools Lighthouse Report`)
-
-      const devtoolsFilePath = path.join(basePath, `${processID}.z.devtools.html`);
-      fs.writeFileSync(devtoolsFilePath, devtoolshtml, {encoding: 'utf-8'});
+    const devtoolsFilePath = path.join(basePath, `${processID}.z.devtools.html`);
+    fs.writeFileSync(devtoolsFilePath, devtoolshtml, {encoding: 'utf-8'});
   }
+
 }
 
 /**
- * Lauches Chrome and lighhouse analysis phase
+ * Lauches Chrome and lighthouse analysis phase
  * 
  * use results.lhr for the JS-consumeable output: @see https://github.com/GoogleChrome/lighthouse/blob/master/types/lhr.d.ts
  * use results.report for the HTML/JSON/CSV output as a string

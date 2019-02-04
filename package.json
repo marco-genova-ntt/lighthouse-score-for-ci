@@ -20,6 +20,7 @@
   "author": "marco.genova@nttdata.com",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.395.0",
     "axios": "^0.18.0",
     "dotenv": "^6.2.0",
     "lighthouse": "^4.0.0",
