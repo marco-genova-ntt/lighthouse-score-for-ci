@@ -14,10 +14,11 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 /**
  * Start an analizer job 
  * 
- * @param {*} pages web pages to analyze 
+ * @param {Array} pages web pages to analyze 
+ * @param {Array} customManagers custom managers for result management
  */
-function analyze(pages) {
+function analyze(pages, customManagers) {
   if (!R.isNil(pages) && R.length(pages) > 0) {
-    (0, _analyzer.launchChrome)(pages);
+    (0, _analyzer.launchChrome)(pages, customManagers);
   }
 }
