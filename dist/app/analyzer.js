@@ -85,7 +85,7 @@ async function launchChrome(pages, config = null) {
 
   for (const page of pages) {
     let results = await (0, _lighthouse.default)(page, opts, config);
-    defaultLighthouseManager(results);
+    defaultLighthouseManager(results.lhr);
   }
 
   chrome.kill();

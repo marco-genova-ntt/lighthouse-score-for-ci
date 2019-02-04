@@ -5,5 +5,5 @@
     ],
     "emulatedFormFactor": "mobile",
     "disableDeviceEmulation": false,
-    "throttlingMethod": "provided"
+    "throttlingMethod": "simulated"
 }
