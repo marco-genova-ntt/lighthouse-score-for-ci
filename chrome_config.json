@@ -3,7 +3,7 @@
         "--print-config",
         "--headless"
     ],
-    "emulatedFormFactor": "desktop",
+    "emulatedFormFactor": "mobile",
     "disableDeviceEmulation": false,
-    "throttlingMethod": "simulate"
+    "throttlingMethod": "simulated"
 }
