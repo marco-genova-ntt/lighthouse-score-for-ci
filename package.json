@@ -37,5 +37,9 @@
     "jest": "^24.0.0",
     "rimraf": "^2.6.3",
     "lighthouse": "^4.0.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/marco-genova-ntt/lighthouse-ci/issues"
+  },
+  "homepage": "https://github.com/marco-genova-ntt/lighthouse-ci#readme"
 }
