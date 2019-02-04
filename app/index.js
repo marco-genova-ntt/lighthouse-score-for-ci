@@ -1,8 +1,13 @@
 import { analyze } from './lighthouse-job';
-import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
 import {dispatchMessageManager} from './slack-emitter';
 
-dotenv.config({ path: path.join(process.cwd(), '.env')});
-const customManagers = [dispatchMessageManager];
-analyze(['https://www.leroymerlin.it','https://www.leroymerlin.it/prodotti/specchi-bagno-CAT35-c'], customManagers);
+
+fs.readFile(path.join(process.cwd(), 'pages.json'), (err, data) => {
+    if (err) throw err;
+
+    const customManagers = [dispatchMessageManager];
+    analyze(JSON.parse(data), customManagers);
+});
+
