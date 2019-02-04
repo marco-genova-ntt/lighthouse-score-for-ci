@@ -20,7 +20,7 @@ var utility = _interopRequireWildcard(require("./utility"));
 
 var _awsUploader = require("./aws-uploader");
 
-var _dns = require("dns");
+var R = _interopRequireWildcard(require("ramda"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -29,13 +29,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Default lighthouse manager to write result on the file system
  * 
+ * @param {string} processID identifier of the analysis run
  * @param {*} results lighthouse results 
  */
-function defaultLighthouseManager(results, chainManagers) {
+function defaultLighthouseManager(processID, results, chainManagers) {
   const html = _reportGenerator.default.generateReportHtml(results);
 
   const basePath = utility.getAbsolutePath(utility.string("REPORT_DIR", "./_reports"));
-  const processID = utility.getProgressiveCounter();
   const keyName = `${processID}.html`;
 
   const filePath = _path.default.join(basePath, keyName);
@@ -62,7 +62,7 @@ function defaultLighthouseManager(results, chainManagers) {
   }
 
   if (chainManagers && R.length(chainManagers)) {
-    const executeManager = x => R.call(x, results);
+    const executeManager = x => R.call(x, processID, results);
 
     R.forEach(executeManager, chainManagers);
   }
@@ -78,13 +78,14 @@ function defaultLighthouseManager(results, chainManagers) {
  * lighthouse results: @see https://github.com/GoogleChrome/lighthouse/blob/master/docs/understanding-results.md
  * chrome configuration: @see https://github.com/GoogleChrome/lighthouse
  *  
+ * @param {string} processID identifier of the analysis run
  * @param {*} pages web pages to analyze
  * @param {Array} customManagers custom managers for result management
  * @param {*} config lighhouse configuration
  */
 
 
-async function launchChrome(pages, customManagers, config = null) {
+async function launchChrome(processID, pages, customManagers, config = null) {
   let opts = JSON.parse(_fs.default.readFileSync(utility.getAbsolutePath("./chrome_config.json"), 'utf8'));
   let chrome = await ChromeLauncher.launch({
     chromeFlags: opts.chromeFlags
@@ -94,7 +95,7 @@ async function launchChrome(pages, customManagers, config = null) {
 
   for (const page of pages) {
     let results = await (0, _lighthouse.default)(page, opts, config);
-    defaultLighthouseManager(results.lhr, customManagers);
+    defaultLighthouseManager(processID, results.lhr, customManagers);
   }
 
   chrome.kill();
