@@ -41,7 +41,6 @@ export function upload(bucketName, keyName, content) {
  * @param {String} fileName 
  */
 export function uploadFile (bucketName, keyName, fileName) {
-
     fs.readFile(fileName, (err, data) => {
         if (err) throw err;
         upload(bucketName, keyName, data);

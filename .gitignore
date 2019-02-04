@@ -1,6 +1,9 @@
 # Reports
 _reports/*
 
+#Pages of project
+pages.json
+
 #local storage
 .local_storage.json
 
