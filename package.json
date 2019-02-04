@@ -2,11 +2,15 @@
   "name": "lighthouse-ci",
   "version": "0.1.0",
   "description": "LightHouse CI - Module used to create a very simple step for continous integratraion",
-  "main": "dist/app/lighthouse-job.js",
+  "main": "dist/app/index.js",
   "scripts": {
     "test": "npm run build && jest --coverage --config jest.conf.json",
     "build": "rimraf dist/ && babel ./app --out-dir dist/app --copy-files && babel ./__tests__ --out-dir dist/__tests__ --copy-file",
-    "start": "npm run build && node dist/app/lighthouse-job.js"
+    "start": "npm run build && node dist/app/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marco-genova-ntt/lighthouse-ci.git"
   },
   "keywords": [
     "google lighthouse",

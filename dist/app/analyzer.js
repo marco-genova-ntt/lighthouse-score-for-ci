@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.launchChromeAndRunLighthouse = launchChromeAndRunLighthouse;
 exports.defaultLighthouseManager = defaultLighthouseManager;
+exports.launchChrome = launchChrome;
 
 var _lighthouse = _interopRequireDefault(require("lighthouse"));
 
@@ -15,8 +16,6 @@ var ChromeLauncher = _interopRequireWildcard(require("chrome-launcher"));
 var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
-
-var _v = _interopRequireDefault(require("uuid/v4"));
 
 var utility = _interopRequireWildcard(require("./utility"));
 
@@ -46,8 +45,8 @@ function launchChromeAndRunLighthouse(url, config = null, resultManager) {
   }).then(chrome => {
     opts.port = chrome.port;
     return (0, _lighthouse.default)(url, opts, config).then(results => {
-      return chrome.kill().then(() => results.lhr).catch(err => console.error("error during analysis phase: %s", err.message));
-    }).catch(err => console.error("error during lighthouse execution: %s", err.message));
+      return chrome.kill().then(() => results.lhr).catch(err => console.error("error during analysis phase: %s, [STACK] %s", err.message, err.stack));
+    }).catch(err => console.error("error during lighthouse execution: %s, [STACK] %s", err.message, err.stack));
   });
 }
 /**
@@ -81,4 +80,20 @@ function defaultLighthouseManager(results) {
       encoding: 'utf-8'
     });
   }
+}
+
+async function launchChrome(pages, config = null) {
+  let opts = JSON.parse(_fs.default.readFileSync(utility.getAbsolutePath("./chrome_config.json"), 'utf8'));
+  let chrome = await ChromeLauncher.launch({
+    chromeFlags: opts.chromeFlags
+  });
+  console.log('chrome: %s', chrome.pid);
+  opts.port = chrome.port;
+
+  for (const page of pages) {
+    let results = await (0, _lighthouse.default)(page, opts, config);
+    defaultLighthouseManager(results);
+  }
+
+  chrome.kill();
 }
