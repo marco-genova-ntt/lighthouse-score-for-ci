@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.launchChromeAndRunLighthouse = launchChromeAndRunLighthouse;
 exports.defaultLighthouseManager = defaultLighthouseManager;
+exports.launchChrome = launchChrome;
 
 var _lighthouse = _interopRequireDefault(require("lighthouse"));
 
@@ -79,4 +80,20 @@ function defaultLighthouseManager(results) {
       encoding: 'utf-8'
     });
   }
+}
+
+async function launchChrome(pages, config = null) {
+  let opts = JSON.parse(_fs.default.readFileSync(utility.getAbsolutePath("./chrome_config.json"), 'utf8'));
+  let chrome = await ChromeLauncher.launch({
+    chromeFlags: opts.chromeFlags
+  });
+  console.log('chrome: %s', chrome.pid);
+  opts.port = chrome.port;
+
+  for (const page of pages) {
+    let results = await (0, _lighthouse.default)(page, opts, config);
+    defaultLighthouseManager(results);
+  }
+
+  chrome.kill();
 }

@@ -13,8 +13,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function analyze(pages) {
   if (!R.isNil(pages) && R.length(pages) > 0) {
-    const runner = page => (0, _analyzer.launchChromeAndRunLighthouse)(page).then(_analyzer.defaultLighthouseManager).catch(err => console.error("error during job execution: %s, [STACK] %s", err.message, err.stack));
-
-    R.forEach(runner, pages);
+    (0, _analyzer.launchChrome)(pages);
   }
 }
