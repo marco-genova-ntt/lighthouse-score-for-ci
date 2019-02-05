@@ -24,7 +24,7 @@ The flow is very simple:
 ## Clone the project from github
 
 
->git clone https://github.com/marco-genova-ntt/lighthouse-ci
+>git clone https://github.com/marco-genova-ntt/lighthouse-score-for-ci.git
 
 
 ## Build project
