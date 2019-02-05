@@ -1,4 +1,4 @@
-# LightHouse CI 
+# LightHouse score for CI 
 The goal of this module is to enable the creation of a very simple step for continous integratraion and google lighthouse.(https://developers.google.com/web/tools/lighthouse/)
 
 ## Scope
