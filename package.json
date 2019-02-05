@@ -1,6 +1,6 @@
 {
   "name": "lighthouse-score-for-ci",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LightHouse CI - Module used to create a very simple step for continous integratraion",
   "main": "dist/app/lighthouse-job.js",
   "scripts": {
