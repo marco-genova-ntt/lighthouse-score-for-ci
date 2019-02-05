@@ -1,5 +1,6 @@
 # LightHouse score for CI
 [![Build Status](https://travis-ci.org/marco-genova-ntt/lighthouse-ci.svg?branch=master)](https://travis-ci.org/marco-genova-ntt/lighthouse-ci)
+[![Coverage Status](https://coveralls.io/repos/github/marco-genova-ntt/lighthouse-ci/badge.svg?branch=add-coveralls)](https://coveralls.io/github/marco-genova-ntt/lighthouse-ci?branch=add-coveralls)
 
 The goal of this module is to enable the creation of a very simple step for continous integratraion and google lighthouse.(https://developers.google.com/web/tools/lighthouse/)
 
@@ -8,7 +9,7 @@ The goal of this module is to enable the creation of a very simple step for cont
 The flow is very simple:
 
 * Download the project from github or install via npm
-* build the project 
+* build the project
 * define the web pages array (JSON Array)
 * define the file .env
 * starts the analysis
@@ -91,7 +92,7 @@ The project is ES6-based.
 
 I have create a simple app not distributed (actually) to manage the connection between simple bot and slack workspace. 
 
-![Slack App configured](https://github.com/marco-genova-ntt/lighthouse-ci/blob/master/assests/img/slack-workspace.png)
+![Slack App configured](https://github.com/marco-genova-ntt/lighthouse-ci/blob/master/assets/img/slack-workspace.png)
 
 Reference to slack guide: https://api.slack.com/slack-apps
 
@@ -120,3 +121,10 @@ In the file _chrome_config.json_ add some options, follows working example:
     "throttlingMethod": "simulate"
 }
 ```
+
+### Default report directory
+The application generates reports in a default directory
+
+`<project_dir>/_reports`
+
+Acutally can not be changed.
