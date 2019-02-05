@@ -1,4 +1,6 @@
-# LightHouse score for CI 
+# LightHouse score for CI
+[![Build Status](https://travis-ci.org/marco-genova-ntt/lighthouse-ci.svg?branch=master)](https://travis-ci.org/marco-genova-ntt/lighthouse-ci)
+
 The goal of this module is to enable the creation of a very simple step for continous integratraion and google lighthouse.(https://developers.google.com/web/tools/lighthouse/)
 
 ## Scope
