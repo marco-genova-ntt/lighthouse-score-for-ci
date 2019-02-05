@@ -1,6 +1,6 @@
 # LightHouse score for CI
-[![Build Status](https://travis-ci.org/marco-genova-ntt/lighthouse-ci.svg?branch=master)](https://travis-ci.org/marco-genova-ntt/lighthouse-ci)
-[![Coverage Status](https://coveralls.io/repos/github/marco-genova-ntt/lighthouse-ci/badge.svg?branch=add-coveralls)](https://coveralls.io/github/marco-genova-ntt/lighthouse-ci?branch=add-coveralls)
+[![Build Status](https://travis-ci.org/marco-genova-ntt/lighthouse-score-for-ci.svg?branch=master)](https://travis-ci.org/marco-genova-ntt/lighthouse-score-for-ci)
+[![Coverage Status](https://coveralls.io/repos/github/marco-genova-ntt/lighthouse-score-for-ci/badge.svg?branch=add-new-version-coverall)](https://coveralls.io/github/marco-genova-ntt/lighthouse-score-for-ci?branch=add-new-version-coverall)
 
 The goal of this module is to enable the creation of a very simple step for continous integratraion and google lighthouse.(https://developers.google.com/web/tools/lighthouse/)
 
