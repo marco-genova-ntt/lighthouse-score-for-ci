@@ -98,3 +98,25 @@ Reference to slack guide: https://api.slack.com/slack-apps
 ### Create a bucket on Amazon Web Services (AWS) S3
 
 This guide can be very helpful to create a bucket specific for this scenario: https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
+
+## Notes
+
+### CentsOS 7
+
+Install Google Shrome Stable, follows this very simple guide: https://allmytechproblems.blogspot.com/2019/02/install-chrome-stable-version-on-centos.html
+
+In the file _chrome_config.json_ add some options, follows working example:
+
+```
+{
+    "chromeFlags": [
+        "--print-config",
+        "--headless",
+        "--no-sandbox",
+        "--disable-gpu"
+    ],
+    "emulatedFormFactor": "mobile",
+    "disableDeviceEmulation": false,
+    "throttlingMethod": "simulate"
+}
+```
