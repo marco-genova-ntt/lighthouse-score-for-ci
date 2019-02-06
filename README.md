@@ -56,11 +56,18 @@ AWS_S3_WRITING_ENABLED=true
 #AWS S3 Bucket name, to define on your AWS Console S3 (CHANGEIT!!!)
 AWS_BUCKET_NAME=test.slackplugin
 
-#manged by standard mechanism
-#AWS_SECURITY (managed by <user_home>/.aws/credentials)
-
 #AWS base url change the bucket name in the url but don't change the {processID}
 AWS_S3_TEMPLATE_RESOURCE=https://s3.eu-north-2.amazonaws.com/test.slackplugin/{processID}.html
+
+#manged by standard mechanism
+#AWS_SECURITY (managed by environment variables)
+
+#AWS SECURITY MANAGENT
+AWS_ACCESS_KEY_ID=.....
+AWS_SECRET_ACCESS_KEY=....
+
+#OPTIONAL
+#AWS_SESSION_TOKEN
 ```
 
 ## Define pages.json
