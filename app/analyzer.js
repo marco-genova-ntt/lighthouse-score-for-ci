@@ -3,6 +3,7 @@ import ReportGenerator from 'lighthouse/lighthouse-core/report/report-generator'
 import * as ChromeLauncher from 'chrome-launcher';
 import fs from 'fs';
 import path from 'path';
+import mkdirp from 'mkdirp';
 import * as utility from './utility';
 import {uploadFile} from './aws-uploader';
 import * as R from 'ramda';
@@ -22,6 +23,7 @@ export function defaultLighthouseManager(processID, page, results, chainManagers
   const keyName = `${processID}.html`;
   const filePath = path.join(basePath, keyName);
   
+  utility.mkDirByPathSync(basePath);
   fs.writeFile(filePath, html, {encoding: 'utf-8'}, (err) => {
     if (err) throw err;
     

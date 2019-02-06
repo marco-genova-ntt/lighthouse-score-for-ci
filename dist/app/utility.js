@@ -10,11 +10,14 @@ exports.replace = replace;
 exports.randomInt = randomInt;
 exports.getAbsolutePath = getAbsolutePath;
 exports.getProgressiveCounter = getProgressiveCounter;
+exports.mkDirByPathSync = mkDirByPathSync;
 exports.concatAll = void 0;
 
 var R = _interopRequireWildcard(require("ramda"));
 
 var _process = _interopRequireDefault(require("process"));
+
+var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
@@ -115,4 +118,45 @@ function getAbsolutePath(relativePath = '') {
 function getProgressiveCounter(specificStore) {
   const storeToUse = specificStore ? specificStore : store;
   return storeToUse.setValueToStorage('COUNTER', R.inc(storeToUse.getValueFromStorage('COUNTER', 0)));
+}
+/**
+ * Creates a not existent directory in recursive way. (Support Node <= 10.11.0)
+ * 
+ * @param {*} targetDir the child file or directory
+ * @param {*} params
+ */
+
+
+function mkDirByPathSync(targetDir, {
+  isRelativeToScript = false
+} = {}) {
+  const sep = _path.default.sep;
+  const initDir = _path.default.isAbsolute(targetDir) ? sep : '';
+  const baseDir = isRelativeToScript ? __dirname : '.';
+  return targetDir.split(sep).reduce((parentDir, childDir) => {
+    const curDir = _path.default.resolve(baseDir, parentDir, childDir);
+
+    try {
+      _fs.default.mkdirSync(curDir);
+    } catch (err) {
+      if (err.code === 'EEXIST') {
+        // curDir already exists!
+        return curDir;
+      } // To avoid `EISDIR` error on Mac and `EACCES`-->`ENOENT` and `EPERM` on Windows.
+
+
+      if (err.code === 'ENOENT') {
+        // Throw the original parentDir error on curDir `ENOENT` failure.
+        throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`);
+      }
+
+      const caughtErr = ['EACCES', 'EPERM', 'EISDIR'].indexOf(err.code) > -1;
+
+      if (!caughtErr || caughtErr && curDir === _path.default.resolve(targetDir)) {
+        throw err; // Throw if it's just the last created dir.
+      }
+    }
+
+    return curDir;
+  }, initDir);
 }

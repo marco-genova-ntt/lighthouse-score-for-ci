@@ -16,6 +16,8 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
+var _mkdirp = _interopRequireDefault(require("mkdirp"));
+
 var utility = _interopRequireWildcard(require("./utility"));
 
 var _awsUploader = require("./aws-uploader");
@@ -42,6 +44,8 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
   const keyName = `${processID}.html`;
 
   const filePath = _path.default.join(basePath, keyName);
+
+  utility.mkDirByPathSync(basePath);
 
   _fs.default.writeFile(filePath, html, {
     encoding: 'utf-8'
