@@ -1,5 +1,6 @@
 import * as utility from '../app/utility';
 import process from 'process';
+import fs from 'fs';
 
 test('check default string', () => {
     expect(utility.string('NOT_DEF', 'def')).toBe('def');
@@ -36,4 +37,12 @@ test('check random int', () => {
 
 test('check relative path empty', () => {
     expect(utility.getAbsolutePath()).toEqual(process.cwd());
+});
+
+test('check the directory creation', () => {
+    const directory = './tmp/middle/last';
+    
+    utility.mkDirByPathSync(directory);
+    fs.rmdirSync('./tmp/middle/last');
+    fs.rmdirSync('./tmp/middle');
 });
