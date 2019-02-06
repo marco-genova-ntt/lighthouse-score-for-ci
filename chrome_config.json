@@ -1,7 +1,9 @@
 {
     "chromeFlags": [
         "--print-config",
-        "--headless"
+        "--headless",
+        "--no-sandbox",
+        "--disable-gpu"
     ],
     "emulatedFormFactor": "mobile",
     "disableDeviceEmulation": false,
