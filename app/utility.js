@@ -102,6 +102,7 @@ export function mkDirByPathSync(targetDir, { isRelativeToScript = false } = {}) 
   
     return targetDir.split(sep).reduce((parentDir, childDir) => {
       const curDir = path.resolve(baseDir, parentDir, childDir);
+      
       try {
         fs.mkdirSync(curDir);
       } catch (err) {
@@ -119,7 +120,28 @@ export function mkDirByPathSync(targetDir, { isRelativeToScript = false } = {}) 
           throw err; // Throw if it's just the last created dir.
         }
       }
-  
+
       return curDir;
-    }, initDir);
+  }, initDir);
+}
+
+/**
+ * Gets value for a property of an object. Default value is an empty Array
+ * 
+ * @param {*} refObject object reference
+ * @param {*} idProperty property name
+ */
+export function extractValue (refObject, idProperty) {
+  const hasProperty = R.has(idProperty);
+  
+  if (refObject && hasProperty(refObject)) {
+      return R.clone(refObject[idProperty]);
   }
+
+  return undefined;
+}
+
+/**
+ * Look up the property corresponding to a string in a lookup object
+ */
+export const lookup = R.flip(R.prop);

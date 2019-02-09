@@ -11,7 +11,8 @@ exports.randomInt = randomInt;
 exports.getAbsolutePath = getAbsolutePath;
 exports.getProgressiveCounter = getProgressiveCounter;
 exports.mkDirByPathSync = mkDirByPathSync;
-exports.concatAll = void 0;
+exports.extractValue = extractValue;
+exports.lookup = exports.concatAll = void 0;
 
 var R = _interopRequireWildcard(require("ramda"));
 
@@ -160,3 +161,27 @@ function mkDirByPathSync(targetDir, {
     return curDir;
   }, initDir);
 }
+/**
+ * Gets value for a property of an object. Default value is an empty Array
+ * 
+ * @param {*} refObject object reference
+ * @param {*} idProperty property name
+ */
+
+
+function extractValue(refObject, idProperty) {
+  const hasProperty = R.has(idProperty);
+
+  if (refObject && hasProperty(refObject)) {
+    return R.clone(refObject[idProperty]);
+  }
+
+  return undefined;
+}
+/**
+ * Look up the property corresponding to a string in a lookup object
+ */
+
+
+const lookup = R.flip(R.prop);
+exports.lookup = lookup;
