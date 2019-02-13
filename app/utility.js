@@ -145,3 +145,43 @@ export function extractValue (refObject, idProperty) {
  * Look up the property corresponding to a string in a lookup object
  */
 export const lookup = R.flip(R.prop);
+
+/**
+ * Loads JSON Object from file system. Gets undefined if the file doesn't exist
+ * 
+ * 
+ * @param {String} internalPath file path
+ * @param {String} encoding encoding, default is UFT-8
+ */
+export function getJSONFromFile(internalPath, encoding = 'utf8') {
+  
+  try {
+    return JSON.parse(fs.readFileSync(internalPath, encoding))
+  } catch (err) {
+    //some errors occurs
+    console.error('file % not found', internalPath);
+  }
+  
+  return undefined;
+}
+
+/**
+ * Writes a JSON on a file
+ * 
+ * @param {String} internalPath 
+ * @param {Any} json 
+ */
+export function writeJSONToFile (internalPath, json) {
+  
+  if (json) {
+    try {
+      fs.writeFileSync(internalPath, JSON.stringify(json));
+      return json;
+    } catch (err) {
+      //some errors occurs
+      console.error('file % not found', internalPath);
+    }
+  }
+
+  return undefined;
+}

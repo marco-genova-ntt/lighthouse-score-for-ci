@@ -9,6 +9,7 @@ pages.json
 
 #tmp files for tests
 __tests__/tmp
+tmp/
 
 # Logs
 logs

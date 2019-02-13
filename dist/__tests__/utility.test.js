@@ -46,3 +46,15 @@ test('check the directory creation', () => {
 
   _fs.default.rmdirSync('./tmp/middle');
 });
+test('create a new json file', () => {
+  const json = {
+    "property": "value"
+  };
+  utility.writeJSONToFile('./tmp/file.json', json);
+  const readJson = utility.getJSONFromFile('./tmp/file.json');
+  expect(readJson).toEqual(json);
+});
+test('read not existent file', () => {
+  const readJson = utility.getJSONFromFile('./tmp/file-not-exist.json');
+  expect(readJson).toBeUndefined();
+});
