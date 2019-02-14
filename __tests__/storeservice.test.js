@@ -2,7 +2,7 @@ import SeriesService from './../app/allseries/services/SeriesService';
 
 test('check constructuor', () => {
     const storeService = new SeriesService(undefined);
-    expect(storeService.validConfiguration).toEqual({});
+    expect(storeService.validConfiguration).toEqual({"path": "./tmp/database.json"});
 });
 
 

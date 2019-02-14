@@ -3,7 +3,6 @@ import ReportGenerator from 'lighthouse/lighthouse-core/report/report-generator'
 import * as ChromeLauncher from 'chrome-launcher';
 import fs from 'fs';
 import path from 'path';
-import mkdirp from 'mkdirp';
 import * as utility from './utility';
 import {uploadFile} from './aws-uploader';
 import * as R from 'ramda';
@@ -43,8 +42,11 @@ export function defaultLighthouseManager(processID, page, results, chainManagers
     fs.writeFileSync(devtoolsFilePath, devtoolshtml, {encoding: 'utf-8'});
   }
 
-  if(chainManagers && R.length(chainManagers)) {
-    const executeManager = x => R.call(x, processID, page, results);
+  if(chainManagers && R.length(chainManagers) > 0) {
+    const executeManager = x => {
+      R.call(x, processID, page, results);
+    };
+
     R.forEach(executeManager, chainManagers);
   }
 }

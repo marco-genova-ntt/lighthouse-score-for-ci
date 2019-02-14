@@ -14,6 +14,8 @@ exports.mkDirByPathSync = mkDirByPathSync;
 exports.extractValue = extractValue;
 exports.getJSONFromFile = getJSONFromFile;
 exports.writeJSONToFile = writeJSONToFile;
+exports.createHash = createHash;
+exports.nowUTC = nowUTC;
 exports.lookup = exports.concatAll = void 0;
 
 var R = _interopRequireWildcard(require("ramda"));
@@ -24,13 +26,21 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
+var _crypto = _interopRequireDefault(require("crypto"));
+
 var _storage = _interopRequireDefault(require("./storage"));
+
+var _dotenv = _interopRequireDefault(require("dotenv"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 const store = new _storage.default(getAbsolutePath('.local_storage.json'));
+
+_dotenv.default.config({
+  path: _path.default.join(_process.default.cwd(), '.env')
+});
 /**
  * Gets a string environment variable by the given name.
  *
@@ -39,6 +49,7 @@ const store = new _storage.default(getAbsolutePath('.local_storage.json'));
  *
  * @return {String} The value.
  */
+
 
 function string(name, defaultVal = '') {
   return _process.default.env[name] || defaultVal;
@@ -201,7 +212,7 @@ function getJSONFromFile(internalPath, encoding = 'utf8') {
     return JSON.parse(_fs.default.readFileSync(internalPath, encoding));
   } catch (err) {
     //some errors occurs
-    console.error('file % not found', internalPath);
+    console.error('file ', internalPath, ' not found');
   }
 
   return undefined;
@@ -219,12 +230,34 @@ function writeJSONToFile(internalPath, json) {
     try {
       _fs.default.writeFileSync(internalPath, JSON.stringify(json));
 
+      console.error('file written: ', internalPath);
       return json;
     } catch (err) {
       //some errors occurs
-      console.error('file % not found', internalPath);
+      console.error('file ', internalPath, ' not found');
     }
   }
 
   return undefined;
+}
+/**
+ * Based on crypt module.
+ * Creates hash, updates data ang digests the result
+ * 
+ * @param {String} data 
+ * @param {String} algorithm, default MD5
+ * @param {String} digestType, default hex 
+ */
+
+
+function createHash(data, algorithm = 'md5', digestType = 'hex') {
+  return _crypto.default.createHash(algorithm).update(data).digest(digestType);
+}
+/**
+ * Gets a a date string in the format 'YYYY-MM-DD hh:mm:ss'
+ */
+
+
+function nowUTC() {
+  return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 }

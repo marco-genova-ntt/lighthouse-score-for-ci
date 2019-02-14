@@ -2,9 +2,12 @@ import * as R from 'ramda';
 import process from 'process';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import StoreManager from './storage';
+import dotenv from 'dotenv';
 
 const store = new StoreManager(getAbsolutePath('.local_storage.json'));
+dotenv.config({ path: path.join(process.cwd(), '.env')});
 
 /**
  * Gets a string environment variable by the given name.
@@ -159,7 +162,7 @@ export function getJSONFromFile(internalPath, encoding = 'utf8') {
     return JSON.parse(fs.readFileSync(internalPath, encoding))
   } catch (err) {
     //some errors occurs
-    console.error('file % not found', internalPath);
+    console.error('file ',internalPath,' not found');
   }
   
   return undefined;
@@ -176,12 +179,32 @@ export function writeJSONToFile (internalPath, json) {
   if (json) {
     try {
       fs.writeFileSync(internalPath, JSON.stringify(json));
+      console.error('file written: ',internalPath);
       return json;
     } catch (err) {
       //some errors occurs
-      console.error('file % not found', internalPath);
+      console.error('file ',internalPath,' not found');
     }
   }
 
   return undefined;
+}
+
+/**
+ * Based on crypt module.
+ * Creates hash, updates data ang digests the result
+ * 
+ * @param {String} data 
+ * @param {String} algorithm, default MD5
+ * @param {String} digestType, default hex 
+ */
+export function createHash (data, algorithm = 'md5', digestType = 'hex') {
+  return crypto.createHash(algorithm).update(data).digest(digestType);
+}
+
+/**
+ * Gets a a date string in the format 'YYYY-MM-DD hh:mm:ss'
+ */
+export function nowUTC() {
+  return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 }

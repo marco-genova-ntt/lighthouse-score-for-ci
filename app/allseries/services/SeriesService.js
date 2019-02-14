@@ -1,6 +1,5 @@
 import * as R from 'ramda';
 import * as utility from '../../utility';
-import { throws } from 'assert';
 
 class SeriesService {
 
@@ -8,13 +7,14 @@ class SeriesService {
      * 
      * @param {*} configuration 
      */
-    constructor(configuration) {
-
-        if (R.isEmpty(configuration)) {
-            this._configuration = {};
-        } else {
-            this._configuration = R.clone(configuration);
+    constructor(configuration = {}) {
+        this._configuration = R.clone(configuration);
+        
+        if (!this._configuration.path) {
+            this._configuration.path = utility.string('SERIES_SERVICE_DATABASE_FILE', './tmp/database.json');   
         }
+        
+        console.info('Series database placed here:',this._configuration.path);
     }
 
     /**

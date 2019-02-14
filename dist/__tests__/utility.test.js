@@ -58,3 +58,14 @@ test('read not existent file', () => {
   const readJson = utility.getJSONFromFile('./tmp/file-not-exist.json');
   expect(readJson).toBeUndefined();
 });
+test('not empty result on createhash', () => {
+  let valued = utility.createHash('value');
+  expect(valued).not.toBeUndefined();
+  expect(valued).not.toBeNull();
+});
+test('not empty result on nowUTC', () => {
+  let valued = utility.nowUTC();
+  expect(valued).not.toBeUndefined();
+  expect(valued).not.toBeNull();
+  expect(valued.length).toBe(19);
+});

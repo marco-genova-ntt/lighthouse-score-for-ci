@@ -16,8 +16,6 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
-var _mkdirp = _interopRequireDefault(require("mkdirp"));
-
 var utility = _interopRequireWildcard(require("./utility"));
 
 var _awsUploader = require("./aws-uploader");
@@ -68,8 +66,10 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
     });
   }
 
-  if (chainManagers && R.length(chainManagers)) {
-    const executeManager = x => R.call(x, processID, page, results);
+  if (chainManagers && R.length(chainManagers) > 0) {
+    const executeManager = x => {
+      R.call(x, processID, page, results);
+    };
 
     R.forEach(executeManager, chainManagers);
   }

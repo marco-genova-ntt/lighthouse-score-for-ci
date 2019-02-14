@@ -6,7 +6,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 test('check constructuor', () => {
   const storeService = new _SeriesService.default(undefined);
-  expect(storeService.validConfiguration).toEqual({});
+  expect(storeService.validConfiguration).toEqual({
+    "path": "./tmp/database.json"
+  });
 });
 test('check base Configuration', () => {
   const storeService = new _SeriesService.default({
