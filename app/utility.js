@@ -75,10 +75,19 @@ export function randomInt(low = 0, high = 100) {
 /**
  * Gets absolute path adding an optional relative path
  * 
- * @param {*} relativePath optinal relative path to add
+ * @param {*} relativePath optional relative path to add
  */
 export function getAbsolutePath(relativePath = '') {
     return path.join(process.cwd(),relativePath);
+}
+
+/**
+ * Extracts file name from path.
+ * 
+ * @param {String} relativePath path to analyze
+ */
+export function extractFileName (relativePath = '') {
+    return path.basename(relativePath);
 }
 
 /**
@@ -207,4 +216,32 @@ export function createHash (data, algorithm = 'md5', digestType = 'hex') {
  */
 export function nowUTC() {
   return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+}
+
+/**
+ * Regular expressions contain special (meta) characters, and as such it is 
+ * dangerous to blindly pass an argument in the find function above without 
+ * pre-processing it to escape those characters. 
+ * This is covered in the Mozilla Developer Network's JavaScript Guide on Regular Expressions, 
+ * where they present the following utility function.
+ * 
+ * @see https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string-in-javascript
+ * @param {*} str string to escape
+ */
+export function escapeRegExp(str) {
+  return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+
+/**
+ * Replaces all occurrence partial strings. 
+ * Sustitute ramda functionality.
+ * 
+ * @see https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string-in-javascript
+ * 
+ * @param {*} str string to escape
+ * @param {*} find part of string to replace
+ * @param {*} replace string to add for replace
+ */
+export function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }

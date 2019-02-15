@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Line Chart</title>
+  <title>${page}</title>
   <link href="https://playground.anychart.com/templates/line_chart/iframe" rel="canonical">
   <meta content="Continuous Chart,Line Chart" name="keywords">
   <meta content="AnyChart - JavaScript Charts designed to be embedded and integrated" name="description">
@@ -88,7 +88,7 @@ chart.xAxis().title("Runs");
 chart.yAxis().title("Values (0-100)");
 
 // set the chart title
-chart.title("30 day performances");
+chart.title("Performances page: ${page}");
 chart.container('container');
 chart.draw();
 });</script>

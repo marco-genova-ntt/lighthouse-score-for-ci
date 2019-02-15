@@ -37,6 +37,7 @@ class SeriesStoreManager {
     const database = utility.getJSONFromFile(internalFile);
 
     if (!database) {
+      console.log('initialize empty database');
       utility.writeJSONToFile(internalFile, {});
       return {};
     }
@@ -53,6 +54,7 @@ class SeriesStoreManager {
   saveDatabase(database) {
     if (database) {
       const internalFile = this._configuration.path;
+      console.log('write database: ', database, ' to ', internalFile);
       utility.writeJSONToFile(internalFile, database);
     }
 

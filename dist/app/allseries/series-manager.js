@@ -9,6 +9,8 @@ exports.populatesPerformancesWithKey = populatesPerformancesWithKey;
 
 var _SeriesStoreManager = _interopRequireDefault(require("./SeriesStoreManager"));
 
+var _AWSSeriesStoreManager = _interopRequireDefault(require("./AWSSeriesStoreManager"));
+
 var dbSeries = _interopRequireWildcard(require("./db-series"));
 
 var utility = _interopRequireWildcard(require("../utility"));
@@ -21,7 +23,15 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const seriesStoreManager = new _SeriesStoreManager.default();
+let seriesStoreManager; ///XXX implement factory mode
+
+if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
+  seriesStoreManager = new _AWSSeriesStoreManager.default();
+  console.info('trend report mode: AWS');
+} else {
+  seriesStoreManager = new _SeriesStoreManager.default();
+  console.info('trend report mode: LOCAL');
+}
 /**
  * Manges series:
  * 
@@ -38,20 +48,23 @@ const seriesStoreManager = new _SeriesStoreManager.default();
  * @param {*} results lighthouse complete results set
  */
 
+
 function dispatchSeriesManager(processID = '000000', page = '', results) {
   if (results) {
     //load database 
-    let allSeries = seriesStoreManager.loadDatabase(); //extract performances
+    let allSeries = seriesStoreManager.loadDatabase();
+    console.info('all series from database: ', allSeries); //extract performances
 
     let performances = lfs.extractPerformanceValues(results);
     performances = populatesPerformancesWithDate(performances);
     performances = populatesPerformancesWithKey(performances, processID); //add to performances
 
     dbSeries.addValueToSeries(allSeries, performances.key, performances);
+    console.info('all series after update: ', allSeries);
     seriesStoreManager.saveDatabase(allSeries);
 
     if (utility.bool('SERIES_ENABLE_TREND_REPORT')) {
-      (0, _serieReport.createHTMLReport)(utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
+      (0, _serieReport.createHTMLReport)(`${performances.key}.html`, utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
     }
   }
 }

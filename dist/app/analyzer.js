@@ -18,7 +18,7 @@ var _path = _interopRequireDefault(require("path"));
 
 var utility = _interopRequireWildcard(require("./utility"));
 
-var _awsUploader = require("./aws-uploader");
+var _awsS3Manager = require("./aws-s3-manager");
 
 var _ramda = _interopRequireDefault(require("ramda"));
 
@@ -52,7 +52,7 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
 
     if (utility.bool('AWS_S3_WRITING_ENABLED', false)) {
       const bucketName = utility.string('AWS_BUCKET_NAME');
-      (0, _awsUploader.uploadFile)(bucketName, keyName, filePath);
+      (0, _awsS3Manager.uploadFile)(bucketName, keyName, filePath);
     }
   });
 

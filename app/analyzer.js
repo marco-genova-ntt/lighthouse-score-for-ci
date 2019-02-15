@@ -4,7 +4,7 @@ import * as ChromeLauncher from 'chrome-launcher';
 import fs from 'fs';
 import path from 'path';
 import * as utility from './utility';
-import {uploadFile} from './aws-uploader';
+import {uploadFile} from './aws-s3-manager';
 import R from 'ramda';
 
 /**

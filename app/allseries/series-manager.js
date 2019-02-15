@@ -1,10 +1,20 @@
 import SeriesStoreManager from './SeriesStoreManager';
+import AWSSeriesStoreManager from './AWSSeriesStoreManager';
 import * as dbSeries from './db-series';
 import * as utility from '../utility';
 import * as lfs from 'lighthouse-score-for-slack';
 import {createHTMLReport} from './serie-report';
 
-const seriesStoreManager = new SeriesStoreManager();
+let seriesStoreManager;
+
+///XXX implement factory mode
+if(utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
+    seriesStoreManager = new AWSSeriesStoreManager();
+    console.info('trend report mode: AWS');
+} else {
+    seriesStoreManager = new SeriesStoreManager();
+    console.info('trend report mode: LOCAL');
+}
 
 /**
  * Manges series:
@@ -27,6 +37,8 @@ export function dispatchSeriesManager(processID = '000000', page = '', results) 
         //load database 
         let allSeries = seriesStoreManager.loadDatabase();
 
+        console.info('all series from database: ', allSeries);
+
         //extract performances
         let performances = lfs.extractPerformanceValues(results);
         performances = populatesPerformancesWithDate (performances);
@@ -34,10 +46,11 @@ export function dispatchSeriesManager(processID = '000000', page = '', results) 
         
         //add to performances
         dbSeries.addValueToSeries(allSeries, performances.key, performances);
+        console.info('all series after update: ', allSeries);
         seriesStoreManager.saveDatabase(allSeries);
 
         if(utility.bool('SERIES_ENABLE_TREND_REPORT')) {
-            createHTMLReport(utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
+            createHTMLReport(`${performances.key}.html`, utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
         }
     }
 }
