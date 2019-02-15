@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import process from 'process';
 import fs from 'fs';
 import path from 'path';

@@ -7,9 +7,9 @@ exports.analyze = analyze;
 
 var _analyzer = require("./analyzer");
 
-var R = _interopRequireWildcard(require("ramda"));
+var _ramda = _interopRequireDefault(require("ramda"));
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Starts an analizer job on pages
@@ -18,7 +18,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @param {Array} customManagers custom managers for result management
  */
 function analyze(pages, customManagers) {
-  if (!R.isNil(pages) && R.length(pages) > 0) {
+  if (!_ramda.default.isNil(pages) && _ramda.default.length(pages) > 0) {
     (0, _analyzer.launchChrome)(pages, customManagers);
   }
 }

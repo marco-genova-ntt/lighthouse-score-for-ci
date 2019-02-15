@@ -7,7 +7,7 @@ exports.dispatchSeriesManager = dispatchSeriesManager;
 exports.populatesPerformancesWithDate = populatesPerformancesWithDate;
 exports.populatesPerformancesWithKey = populatesPerformancesWithKey;
 
-var _SeriesService = _interopRequireDefault(require("./services/SeriesService"));
+var _SeriesStoreManager = _interopRequireDefault(require("./SeriesStoreManager"));
 
 var dbSeries = _interopRequireWildcard(require("./db-series"));
 
@@ -15,11 +15,13 @@ var utility = _interopRequireWildcard(require("../utility"));
 
 var lfs = _interopRequireWildcard(require("lighthouse-score-for-slack"));
 
+var _serieReport = require("./serie-report");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const seriesService = new _SeriesService.default();
+const seriesStoreManager = new _SeriesStoreManager.default();
 /**
  * Manges series:
  * 
@@ -30,6 +32,7 @@ const seriesService = new _SeriesService.default();
  *  <li>add new serie</li>
  *  <li>save all series</li>
  * </ol>
+ * 
  * @param {*} processID process analysis identifier 
  * @param {*} page references page
  * @param {*} results lighthouse complete results set
@@ -38,14 +41,18 @@ const seriesService = new _SeriesService.default();
 function dispatchSeriesManager(processID = '000000', page = '', results) {
   if (results) {
     //load database 
-    let allSeries = seriesService.loadDatabase(); //extract performances
+    let allSeries = seriesStoreManager.loadDatabase(); //extract performances
 
     let performances = lfs.extractPerformanceValues(results);
     performances = populatesPerformancesWithDate(performances);
     performances = populatesPerformancesWithKey(performances, processID); //add to performances
 
     dbSeries.addValueToSeries(allSeries, performances.key, performances);
-    seriesService.saveDatabase(allSeries);
+    seriesStoreManager.saveDatabase(allSeries);
+
+    if (utility.bool('SERIES_ENABLE_TREND_REPORT')) {
+      (0, _serieReport.createHTMLReport)(utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
+    }
   }
 }
 /**

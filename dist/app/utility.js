@@ -18,7 +18,7 @@ exports.createHash = createHash;
 exports.nowUTC = nowUTC;
 exports.lookup = exports.concatAll = void 0;
 
-var R = _interopRequireWildcard(require("ramda"));
+var _ramda = _interopRequireDefault(require("ramda"));
 
 var _process = _interopRequireDefault(require("process"));
 
@@ -33,8 +33,6 @@ var _storage = _interopRequireDefault(require("./storage"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 const store = new _storage.default(getAbsolutePath('.local_storage.json'));
 
@@ -91,20 +89,21 @@ function bool(name, defaultVal = false) {
 
 
 function replace(phrase = '', toReplace = '', withValue = '') {
-  return R.replace(`{${toReplace}}`, withValue, phrase);
+  return _ramda.default.replace(`{${toReplace}}`, withValue, phrase);
 }
 /**
  * Concat all string of fields {string}
  */
 
 
-const concatAll = R.unapply(R.reduce(R.concat, ''));
+const concatAll = _ramda.default.unapply(_ramda.default.reduce(_ramda.default.concat, ''));
 /**
  * Generates random integer 
  * 
  * @param {*} low low value
  * @param {*} high high value
  */
+
 
 exports.concatAll = concatAll;
 
@@ -131,7 +130,7 @@ function getAbsolutePath(relativePath = '') {
 
 function getProgressiveCounter(specificStore) {
   const storeToUse = specificStore ? specificStore : store;
-  return storeToUse.setValueToStorage('COUNTER', R.inc(storeToUse.getValueFromStorage('COUNTER', 0)));
+  return storeToUse.setValueToStorage('COUNTER', _ramda.default.inc(storeToUse.getValueFromStorage('COUNTER', 0)));
 }
 /**
  * Creates a not existent directory in recursive way. (Support Node <= 10.11.0)
@@ -183,10 +182,10 @@ function mkDirByPathSync(targetDir, {
 
 
 function extractValue(refObject, idProperty) {
-  const hasProperty = R.has(idProperty);
+  const hasProperty = _ramda.default.has(idProperty);
 
   if (refObject && hasProperty(refObject)) {
-    return R.clone(refObject[idProperty]);
+    return _ramda.default.clone(refObject[idProperty]);
   }
 
   return undefined;
@@ -196,7 +195,7 @@ function extractValue(refObject, idProperty) {
  */
 
 
-const lookup = R.flip(R.prop);
+const lookup = _ramda.default.flip(_ramda.default.prop);
 /**
  * Loads JSON Object from file system. Gets undefined if the file doesn't exist
  * 
@@ -204,6 +203,7 @@ const lookup = R.flip(R.prop);
  * @param {String} internalPath file path
  * @param {String} encoding encoding, default is UFT-8
  */
+
 
 exports.lookup = lookup;
 

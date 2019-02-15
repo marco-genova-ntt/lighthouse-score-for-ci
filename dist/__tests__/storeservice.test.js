@@ -1,23 +1,27 @@
 "use strict";
 
-var _SeriesService = _interopRequireDefault(require("./../app/allseries/services/SeriesService"));
+var _SeriesStoreManager = _interopRequireDefault(require("./../app/allseries/SeriesStoreManager"));
+
+var _process = _interopRequireDefault(require("process"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 test('check constructuor', () => {
-  const storeService = new _SeriesService.default(undefined);
+  _process.default.env['SERIES_SERVICE_DATABASE_FILE'] = './tmp/database.json';
+  const storeService = new _SeriesStoreManager.default();
   expect(storeService.validConfiguration).toEqual({
     "path": "./tmp/database.json"
   });
 });
 test('check base Configuration', () => {
-  const storeService = new _SeriesService.default({
+  const storeService = new _SeriesStoreManager.default({
     path: 'my-path'
   });
   expect(storeService.validConfiguration.path).toEqual('my-path');
 });
 test('check save and load database', () => {
-  const storeService = new _SeriesService.default({
+  _process.default.env['SERIES_DIMENSION'] = 4;
+  const storeService = new _SeriesStoreManager.default({
     path: './tmp/database.json'
   });
   const dataBase = {

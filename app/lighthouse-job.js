@@ -1,5 +1,5 @@
 import {launchChrome} from './analyzer';
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Starts an analizer job on pages

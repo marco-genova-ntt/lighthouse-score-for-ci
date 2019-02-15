@@ -1,7 +1,7 @@
-import * as R from 'ramda';
-import * as utility from '../../utility';
+import R from 'ramda';
+import * as utility from '../utility';
 
-class SeriesService {
+class SeriesStoreManager {
 
     /**
      * 
@@ -51,4 +51,4 @@ class SeriesService {
     }
 }
 
-export default SeriesService;
+export default SeriesStoreManager;

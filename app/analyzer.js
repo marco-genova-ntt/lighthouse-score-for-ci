@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import * as utility from './utility';
 import {uploadFile} from './aws-uploader';
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Default lighthouse manager to write result on the file system.

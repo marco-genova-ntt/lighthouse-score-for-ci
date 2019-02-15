@@ -1,5 +1,5 @@
 import Storage from 'node-storage';
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Manges a simple storage to save data among several runs 

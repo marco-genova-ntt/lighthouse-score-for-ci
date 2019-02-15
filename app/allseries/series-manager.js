@@ -1,9 +1,10 @@
-import SeriesService from './services/SeriesService';
+import SeriesStoreManager from './SeriesStoreManager';
 import * as dbSeries from './db-series';
 import * as utility from '../utility';
 import * as lfs from 'lighthouse-score-for-slack';
+import {createHTMLReport} from './serie-report';
 
-const seriesService = new SeriesService();
+const seriesStoreManager = new SeriesStoreManager();
 
 /**
  * Manges series:
@@ -15,6 +16,7 @@ const seriesService = new SeriesService();
  *  <li>add new serie</li>
  *  <li>save all series</li>
  * </ol>
+ * 
  * @param {*} processID process analysis identifier 
  * @param {*} page references page
  * @param {*} results lighthouse complete results set
@@ -23,7 +25,7 @@ export function dispatchSeriesManager(processID = '000000', page = '', results) 
 
     if (results) {
         //load database 
-        let allSeries = seriesService.loadDatabase();
+        let allSeries = seriesStoreManager.loadDatabase();
 
         //extract performances
         let performances = lfs.extractPerformanceValues(results);
@@ -32,7 +34,11 @@ export function dispatchSeriesManager(processID = '000000', page = '', results) 
         
         //add to performances
         dbSeries.addValueToSeries(allSeries, performances.key, performances);
-        seriesService.saveDatabase(allSeries);
+        seriesStoreManager.saveDatabase(allSeries);
+
+        if(utility.bool('SERIES_ENABLE_TREND_REPORT')) {
+            createHTMLReport(utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
+        }
     }
 }
 
@@ -57,4 +63,4 @@ export function populatesPerformancesWithDate(performances = {}) {
  */
 export function populatesPerformancesWithKey(performances, processID = '000000') {
     return {...performances, key: utility.createHash(performances.url), processID: processID};
-}
+} 
