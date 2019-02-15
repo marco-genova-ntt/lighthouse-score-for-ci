@@ -10,7 +10,7 @@ import * as utility from '../utility';
  */
 export function createHTMLReport(fileName, serie) {
     if (serie && R.length(serie) > 0) {
-        const content = fs.readFileSync(utility.string('SERIES_TEMAPLTE_TREND_FILE','./templates/anychart-template.txt'), 'utf-8');
+        const content = fs.readFileSync(utility.string('SERIES_TEMAPLTE_TREND_FILE','./templates/series/anychart-template.txt'), 'utf-8');
         const data = R.map(remapPerformances, serie);
         const result = content.toString().replace('${data_seeds}', JSON.stringify(data));
         
