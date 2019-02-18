@@ -21,7 +21,6 @@ function dispatchMessageManager(processID = '000000', page = '', results) {
     let message;
 
     if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
-      //=https://s3.eu-north-1.amazonaws.com/test.lighthouse/{hashcode}.html
       let templateSeries = utility.string('SERIES_AWS_S3_TEMPLATE_RESOURCE');
       const linkToReportSeries = utility.replace(templateSeries, 'hashcode', utility.createHash(performances.url));
       message = `Page: ${performances.url} and Report series: ${linkToReportSeries}`;

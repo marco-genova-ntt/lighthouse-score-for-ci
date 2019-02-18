@@ -72,3 +72,11 @@ test('not empty result on nowUTC', () => {
     expect(valued).not.toBeNull();
     expect(valued.length).toBe(19);
 });
+
+test('replace All occurrencies', () => {
+    let message = 'uno due tre quattro due';
+    let result = utility.replaceAll(message, 'due', 'tre');
+    expect(result).not.toBeUndefined();
+    expect(result).not.toBeNull();
+    expect(result).toEqual('uno tre tre quattro tre');
+});
