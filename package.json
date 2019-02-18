@@ -5,7 +5,7 @@
   "main": "dist/app/lighthouse-job.js",
   "scripts": {
     "test": "npm run build && jest --coverage --config jest.conf.json",
-    "coveralls": "npm run build && jest --coverage --config jest.conf.json && cat ./coverage/lcov.info | coveralls",
+    "coveralls": "npm run build && jest --coverage --config jest.conf.json --coverageReporters=text-lcov | coveralls",
     "build": "rimraf dist/ && babel ./app --out-dir dist/app --copy-files && babel ./__tests__ --out-dir dist/__tests__ --copy-file",
     "start": "npm run build && node dist/app/index.js"
   },
