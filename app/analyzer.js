@@ -70,7 +70,7 @@ export async function launchChrome(pages, customManagers, config = null) {
   let opts = JSON.parse(fs.readFileSync(utility.getAbsolutePath( "./chrome_config.json"), 'utf8'));
   let chrome = await ChromeLauncher.launch({chromeFlags: opts.chromeFlags});
 
-  console.log('chrome: %s', chrome.pid);
+  console.info('chrome process id:', chrome.pid);
   opts.port = chrome.port;
 
   for (const page of pages) {

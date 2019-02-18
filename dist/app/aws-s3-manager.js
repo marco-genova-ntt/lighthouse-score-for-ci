@@ -29,7 +29,7 @@ function upload(bucketName, keyName, content, contentType = 'text/html') {
       Bucket: bucketName
     }
   });
-  console.info('adding ', keyName, ' to ', bucketName, ' content: ', content);
+  console.info('adding ', keyName, ' to ', bucketName);
   var objectParams = {
     Key: keyName,
     Body: content,
@@ -38,7 +38,7 @@ function upload(bucketName, keyName, content, contentType = 'text/html') {
   };
   var uploadPromise = s3.putObject(objectParams).promise();
   uploadPromise.then(function (data) {
-    console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+    console.info("Successfully uploaded data to ", bucketName, "/", keyName);
   }).catch(function (err) {
     console.error(err, err.stack);
   });
@@ -49,10 +49,11 @@ function upload(bucketName, keyName, content, contentType = 'text/html') {
  * @param {String} bucketName bucket name
  * @param {String} keyName key name for content on AWS S3
  * @param {String} fileName file path onto file system
+ * @param {function} callback function called at the end of writing
  */
 
 
-function downloadFile(bucketName, keyName, fileName) {
+async function downloadFile(bucketName, keyName, fileName, callBack) {
   //created my API set for a Bucket
   const s3 = new _awsSdk.default.S3({
     apiVersion: '2006-03-01',
@@ -67,7 +68,7 @@ function downloadFile(bucketName, keyName, fileName) {
 
   let file = _fs.default.createWriteStream(fileName);
 
-  s3.getObject(objectParams).createReadStream().pipe(file);
+  s3.getObject(objectParams).createReadStream().pipe(file).on('close', callBack);
 }
 /**
  * Loads a file from file system and uploads the content.

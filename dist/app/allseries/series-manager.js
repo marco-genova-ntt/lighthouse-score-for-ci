@@ -52,15 +52,13 @@ if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
 function dispatchSeriesManager(processID = '000000', page = '', results) {
   if (results) {
     //load database 
-    let allSeries = seriesStoreManager.loadDatabase();
-    console.info('all series from database: ', allSeries); //extract performances
+    let allSeries = seriesStoreManager.loadDatabase(); //extract performances
 
     let performances = lfs.extractPerformanceValues(results);
     performances = populatesPerformancesWithDate(performances);
     performances = populatesPerformancesWithKey(performances, processID); //add to performances
 
     dbSeries.addValueToSeries(allSeries, performances.key, performances);
-    console.info('all series after update: ', allSeries);
     seriesStoreManager.saveDatabase(allSeries);
 
     if (utility.bool('SERIES_ENABLE_TREND_REPORT')) {

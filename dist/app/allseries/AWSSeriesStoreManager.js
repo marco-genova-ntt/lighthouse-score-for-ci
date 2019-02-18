@@ -15,24 +15,25 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Manage the series information on local enironment as mirror of AWS S3 
+ */
 class AWSSeriesStoreManager extends _SeriesStoreManager.default {
   constructor(configuration = {}) {
     super(configuration);
     this._configuration.dbName = utility.extractFileName(this._configuration.path);
   }
+  /**
+   * Saves all information:
+   * 
+   * <ol>
+   *  <li>In local, then</li>
+   *  <li>In AWS</li>
+   * </ol>
+   * 
+   * @param {Any} database all series json 
+   */
 
-  loadDatabase() {
-    const bucketName = utility.string('AWS_BUCKET_NAME');
-    (0, _awsS3Manager.checkExistence)(bucketName, this._configuration.dbName).then(existence => {
-      if (existence) {
-        (0, _awsS3Manager.downloadFile)(bucketName, this._configuration.dbName, this._configuration.path);
-      }
-
-      return super.loadDatabase();
-    }).catch(function (err) {
-      console.error(err, err.stack);
-    });
-  }
 
   saveDatabase(database) {
     super.saveDatabase(database);
