@@ -187,8 +187,27 @@ export function writeJSONToFile (internalPath, json) {
   
   if (json) {
     try {
-      fs.writeFileSync(internalPath, JSON.stringify(json));
-      console.error('file written: ',internalPath);
+      return writeContentToFile(internalPath, JSON.stringify(json));
+    } catch (err) {
+      //some errors occurs
+      console.error('file ',internalPath,' not found');
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Writes text conent on a file
+ * 
+ * @param {String} internalPath 
+ * @param {String} content 
+ */
+export function writeContentToFile (internalPath, content) {
+  
+  if (content) {
+    try {
+      fs.writeFileSync(internalPath, content);
       return json;
     } catch (err) {
       //some errors occurs

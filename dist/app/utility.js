@@ -15,6 +15,7 @@ exports.mkDirByPathSync = mkDirByPathSync;
 exports.extractValue = extractValue;
 exports.getJSONFromFile = getJSONFromFile;
 exports.writeJSONToFile = writeJSONToFile;
+exports.writeContentToFile = writeContentToFile;
 exports.createHash = createHash;
 exports.nowUTC = nowUTC;
 exports.escapeRegExp = escapeRegExp;
@@ -241,9 +242,28 @@ function getJSONFromFile(internalPath, encoding = 'utf8') {
 function writeJSONToFile(internalPath, json) {
   if (json) {
     try {
-      _fs.default.writeFileSync(internalPath, JSON.stringify(json));
+      return writeContentToFile(internalPath, JSON.stringify(json));
+    } catch (err) {
+      //some errors occurs
+      console.error('file ', internalPath, ' not found');
+    }
+  }
 
-      console.error('file written: ', internalPath);
+  return undefined;
+}
+/**
+ * Writes text conent on a file
+ * 
+ * @param {String} internalPath 
+ * @param {String} content 
+ */
+
+
+function writeContentToFile(internalPath, content) {
+  if (content) {
+    try {
+      _fs.default.writeFileSync(internalPath, content);
+
       return json;
     } catch (err) {
       //some errors occurs

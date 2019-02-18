@@ -37,8 +37,6 @@ export function dispatchSeriesManager(processID = '000000', page = '', results) 
         //load database 
         let allSeries = seriesStoreManager.loadDatabase();
 
-        console.info('all series from database: ', allSeries);
-
         //extract performances
         let performances = lfs.extractPerformanceValues(results);
         performances = populatesPerformancesWithDate (performances);
@@ -46,12 +44,12 @@ export function dispatchSeriesManager(processID = '000000', page = '', results) 
         
         //add to performances
         dbSeries.addValueToSeries(allSeries, performances.key, performances);
-        console.info('all series after update: ', allSeries);
         seriesStoreManager.saveDatabase(allSeries);
 
         if(utility.bool('SERIES_ENABLE_TREND_REPORT')) {
             createHTMLReport(`${performances.key}.html`, utility.getAbsolutePath(`tmp/${performances.key}.html`), dbSeries.getSeries(allSeries, performances.key));
         }
+ 
     }
 }
 
