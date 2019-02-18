@@ -18,6 +18,17 @@ function dispatchMessageManager(processID = '000000', page = '', results) {
     const thumbUrl = utility.string('THUMBURL', 'https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png');
     let template = utility.string('AWS_S3_TEMPLATE_RESOURCE');
     const linkToReport = utility.replace(template, 'processID', processID);
-    lfs.dispatchMessage(processID, author, performances.url, linkToReport, `analyzed: ${page}`, thumbUrl, performances.performance, performances.accessibility, performances.bestpractices, performances.seo, performances.pwa);
+    let message;
+
+    if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
+      //=https://s3.eu-north-1.amazonaws.com/test.lighthouse/{hashcode}.html
+      let templateSeries = utility.string('SERIES_AWS_S3_TEMPLATE_RESOURCE');
+      const linkToReportSeries = utility.replace(templateSeries, 'hashcode', utility.createHash(performances.url));
+      message = `Page: ${performances.url} and Report series: ${linkToReportSeries}`;
+    } else {
+      message = `Page: ${performances.url}`;
+    }
+
+    lfs.dispatchMessage(processID, author, performances.url, linkToReport, message, thumbUrl, performances.performance, performances.accessibility, performances.bestpractices, performances.seo, performances.pwa);
   }
 }
