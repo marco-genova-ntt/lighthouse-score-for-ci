@@ -3,10 +3,9 @@ import ReportGenerator from 'lighthouse/lighthouse-core/report/report-generator'
 import * as ChromeLauncher from 'chrome-launcher';
 import fs from 'fs';
 import path from 'path';
-import mkdirp from 'mkdirp';
 import * as utility from './utility';
-import {uploadFile} from './aws-uploader';
-import * as R from 'ramda';
+import {uploadFile} from './aws-s3-manager';
+import R from 'ramda';
 
 /**
  * Default lighthouse manager to write result on the file system.
@@ -43,8 +42,11 @@ export function defaultLighthouseManager(processID, page, results, chainManagers
     fs.writeFileSync(devtoolsFilePath, devtoolshtml, {encoding: 'utf-8'});
   }
 
-  if(chainManagers && R.length(chainManagers)) {
-    const executeManager = x => R.call(x, processID, page, results);
+  if(chainManagers && R.length(chainManagers) > 0) {
+    const executeManager = x => {
+      R.call(x, processID, page, results);
+    };
+
     R.forEach(executeManager, chainManagers);
   }
 }
@@ -68,7 +70,7 @@ export async function launchChrome(pages, customManagers, config = null) {
   let opts = JSON.parse(fs.readFileSync(utility.getAbsolutePath( "./chrome_config.json"), 'utf8'));
   let chrome = await ChromeLauncher.launch({chromeFlags: opts.chromeFlags});
 
-  console.log('chrome: %s', chrome.pid);
+  console.info('chrome process id:', chrome.pid);
   opts.port = chrome.port;
 
   for (const page of pages) {

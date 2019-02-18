@@ -16,13 +16,11 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
-var _mkdirp = _interopRequireDefault(require("mkdirp"));
-
 var utility = _interopRequireWildcard(require("./utility"));
 
-var _awsUploader = require("./aws-uploader");
+var _awsS3Manager = require("./aws-s3-manager");
 
-var R = _interopRequireWildcard(require("ramda"));
+var _ramda = _interopRequireDefault(require("ramda"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -54,7 +52,7 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
 
     if (utility.bool('AWS_S3_WRITING_ENABLED', false)) {
       const bucketName = utility.string('AWS_BUCKET_NAME');
-      (0, _awsUploader.uploadFile)(bucketName, keyName, filePath);
+      (0, _awsS3Manager.uploadFile)(bucketName, keyName, filePath);
     }
   });
 
@@ -68,10 +66,12 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
     });
   }
 
-  if (chainManagers && R.length(chainManagers)) {
-    const executeManager = x => R.call(x, processID, page, results);
+  if (chainManagers && _ramda.default.length(chainManagers) > 0) {
+    const executeManager = x => {
+      _ramda.default.call(x, processID, page, results);
+    };
 
-    R.forEach(executeManager, chainManagers);
+    _ramda.default.forEach(executeManager, chainManagers);
   }
 }
 /**
@@ -96,7 +96,7 @@ async function launchChrome(pages, customManagers, config = null) {
   let chrome = await ChromeLauncher.launch({
     chromeFlags: opts.chromeFlags
   });
-  console.log('chrome: %s', chrome.pid);
+  console.info('chrome process id:', chrome.pid);
   opts.port = chrome.port;
 
   for (const page of pages) {
