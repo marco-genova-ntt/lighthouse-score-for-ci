@@ -76,3 +76,13 @@ test('replace All occurrencies', () => {
   expect(result).not.toBeNull();
   expect(result).toEqual('uno tre tre quattro tre');
 });
+test('clone prop', () => {
+  let refObjet = {};
+  expect(utility.getClonedProp("not-exist", refObjet)).toBeUndefined();
+  refObjet = {
+    "prop1": "value1",
+    "prop2": "value2"
+  };
+  expect(utility.getClonedProp("prop2", refObjet)).not.toBeUndefined();
+  expect(utility.getClonedProp("prop2", refObjet)).toEqual("value2");
+});

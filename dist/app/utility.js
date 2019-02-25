@@ -20,7 +20,7 @@ exports.createHash = createHash;
 exports.nowUTC = nowUTC;
 exports.escapeRegExp = escapeRegExp;
 exports.replaceAll = replaceAll;
-exports.lookup = exports.concatAll = void 0;
+exports.getClonedProp = exports.lookup = exports.concatAll = void 0;
 
 var _ramda = _interopRequireDefault(require("ramda"));
 
@@ -324,3 +324,11 @@ function escapeRegExp(str) {
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+/**
+ * Gets a cloned prop of an object
+ */
+
+
+const getClonedProp = _ramda.default.pipe(_ramda.default.prop, _ramda.default.clone);
+
+exports.getClonedProp = getClonedProp;
