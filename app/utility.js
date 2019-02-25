@@ -264,3 +264,8 @@ export function escapeRegExp(str) {
 export function replaceAll(str, find, replace) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+
+/**
+ * Gets a cloned prop of an object
+ */
+export const getClonedProp = R.pipe(R.prop, R.clone);

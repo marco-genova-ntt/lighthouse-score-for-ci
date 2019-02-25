@@ -4,22 +4,19 @@ var _lighthouseJob = require("./lighthouse-job");
 
 var utility = _interopRequireWildcard(require("./utility"));
 
-var _fs = _interopRequireDefault(require("fs"));
-
-var _path = _interopRequireDefault(require("path"));
-
 var _slackEmitter = require("./slack-emitter");
 
 var _seriesManager = require("./allseries/series-manager");
 
 var _awsS3Manager = require("./aws-s3-manager");
 
+var _PagesProvider = _interopRequireDefault(require("./PagesProvider"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
-_fs.default.readFile(_path.default.join(process.cwd(), 'pages.json'), (err, data) => {
-  if (err) throw err;
+function startAnalisys(pages) {
   const customManagers = [_slackEmitter.dispatchMessageManager, _seriesManager.dispatchSeriesManager]; //XXX Imporve the design of acquiring database, adding a clear lifecycle 
 
   if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
@@ -31,13 +28,20 @@ _fs.default.readFile(_path.default.join(process.cwd(), 'pages.json'), (err, data
 
       if (existence) {
         (0, _awsS3Manager.downloadFile)(bucketName, dbName, dbPath, () => {
-          (0, _lighthouseJob.analyze)(JSON.parse(data), customManagers);
+          (0, _lighthouseJob.analyze)(pages, customManagers);
         });
       } else {
-        (0, _lighthouseJob.analyze)(JSON.parse(data), customManagers);
+        (0, _lighthouseJob.analyze)(pages, customManagers);
       }
     })();
   } else {
-    (0, _lighthouseJob.analyze)(JSON.parse(data), customManagers);
+    (0, _lighthouseJob.analyze)(pages, customManagers);
   }
-});
+} //docker run -e "LIGHTHOUSE_CI_ENV=qa" lighthouse-slack-ci
+
+
+const pagesProvider = new _PagesProvider.default();
+const context = utility.string('LIGHTHOUSE_CI_ENV', 'prod');
+console.info('LightHouse CI - Environement [', context, ']');
+pagesProvider.loadPages();
+pagesProvider.worksOnPages(context, startAnalisys);

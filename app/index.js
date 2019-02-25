@@ -1,13 +1,11 @@
 import { analyze } from './lighthouse-job';
 import * as utility from './utility';
-import fs from 'fs';
-import path from 'path';
 import {dispatchMessageManager} from './slack-emitter';
 import {dispatchSeriesManager} from './allseries/series-manager';
 import {downloadFile, checkExistence} from './aws-s3-manager';
+import PagesProvider from './PagesProvider';
 
-fs.readFile(path.join(process.cwd(), 'pages.json'), (err, data) => {
-    if (err) throw err;
+function startAnalisys(pages) {
     const customManagers = [dispatchMessageManager, dispatchSeriesManager];
 
     //XXX Imporve the design of acquiring database, adding a clear lifecycle 
@@ -20,14 +18,20 @@ fs.readFile(path.join(process.cwd(), 'pages.json'), (err, data) => {
 
             if (existence) {
                 downloadFile(bucketName, dbName, dbPath, () => {
-                    analyze(JSON.parse(data), customManagers);            
+                    analyze(pages, customManagers);            
                 });
             } else {
-                analyze(JSON.parse(data), customManagers);
+                analyze(pages, customManagers);
             }
         })();
     } else {
-        analyze(JSON.parse(data), customManagers);
+        analyze(pages, customManagers);
     }
-});
+}
+//docker run -e "LIGHTHOUSE_CI_ENV=qa" lighthouse-slack-ci
+const pagesProvider = new PagesProvider();
 
+const context = utility.string('LIGHTHOUSE_CI_ENV', 'prod');
+console.info('LightHouse CI - Environement [',context,']');
+pagesProvider.loadPages();
+pagesProvider.worksOnPages(context, startAnalisys);
