@@ -1,4 +1,5 @@
-import { populatesPerformancesWithDate, populatesPerformancesWithKey } from './../app/allseries/series-manager';
+import { populatesPerformancesWithDate, populatesPerformancesWithKey, populatesPerformancesWithEnv } from './../app/allseries/series-manager';
+import process from 'process';
 
 test('test base functionality of populatesPerformancesWithDate', () => {
     let performances = {};
@@ -18,4 +19,15 @@ test('test base functionality of populatesPerformancesWithKey', () => {
     expect(performances.key).not.toBeUndefined();
     expect(performances.processID).not.toBeUndefined();
     expect(performances.processID).toEqual('123456');
+});
+
+test('test base functionality of populatesPerformancesWithKey', () => {
+    process.env['LIGHTHOUSE_CI_ENV'] = 'toBeTested';
+    let performances = {url:'test'};
+    performances = populatesPerformancesWithEnv(performances);
+    expect(performances).not.toBeUndefined();
+    expect(performances).not.toBeNull();
+
+    expect(performances.environment).not.toBeUndefined();
+    expect(performances.environment).toEqual('toBeTested');
 });

@@ -28,7 +28,6 @@ test('check add values in different ways', () => {
     expect(allSeries['quattro'][0]).toEqual(treObject);
 });
 
-
 test('check add values limit to 4', () => {
     process.env['SERIES_DIMENSION'] = 4;
 
@@ -55,4 +54,17 @@ test('check add values limit to 4', () => {
     expect(allSeries['uno'][1]).toEqual(tre);
     expect(allSeries['uno'][2]).toEqual(quattro);
     expect(allSeries['uno'][3]).toEqual(cinque);
+});
+
+test('check keys from getSerieKeys', () => {
+    let myObject = ['uno'];
+    let allSeries = {};
+    dbSeries.addValueToSeries(allSeries,'uno', myObject);
+    let dueObject = ['due'];
+    dbSeries.addValueToSeries(allSeries,'uno', dueObject);
+    let treObject = ['tre'];
+    dbSeries.addValueToSeries(allSeries,'quattro', treObject);
+
+    let serieKeys = dbSeries.getSerieKeys(allSeries);
+    expect(serieKeys).toEqual(['uno','quattro']);
 });

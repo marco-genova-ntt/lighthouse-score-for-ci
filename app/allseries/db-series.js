@@ -44,4 +44,13 @@ export function getSeries (allSeries, key) {
     return utility.extractValue(allSeries, key);
 }
 
+/**
+ * Gets an array of all keys
+ * 
+ * @param {*} allSeries 
+ */
+export function getSerieKeys(allSeries) {
+    return R.keys(allSeries);
+}
+
 
