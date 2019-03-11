@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.initSeries = initSeries;
 exports.addValueToSeries = addValueToSeries;
 exports.getSeries = getSeries;
+exports.getSerieKeys = getSerieKeys;
 
 var _ramda = _interopRequireDefault(require("ramda"));
 
@@ -57,4 +58,14 @@ function addValueToSeries(allSeries, key, objectToAdd) {
 
 function getSeries(allSeries, key) {
   return utility.extractValue(allSeries, key);
+}
+/**
+ * Gets an array of all keys
+ * 
+ * @param {*} allSeries 
+ */
+
+
+function getSerieKeys(allSeries) {
+  return _ramda.default.keys(allSeries);
 }
