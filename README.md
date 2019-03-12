@@ -50,7 +50,7 @@ SLACK_CHANNEL_ID=C6H41XTRU
 #Base api url, use this for the actual version of api
 SLACK_BASE_API=https://slack.com/api/{method}?token={token}&pretty=1
 
-#Write on AWS (true enable/false disable)
+#Write on AWS (true enable/false disable), guide the usage of .local_storage.json on AWS
 AWS_S3_WRITING_ENABLED=true
 
 #AWS S3 Bucket name, to define on your AWS Console S3 (CHANGEIT!!!)
@@ -103,6 +103,15 @@ LIGHTHOUSE_CI_ENV=qa
 
 ```
 
+## Local Storage
+
+The local storage is based on json database to get and set some utilities values (e.g. process identifier to generate unique reports).
+Actually the file is fixed: **.local_storage.json**
+
+**(V0.5.0+)** In order to support dockerization and idempotention of the execution the file can be saved on AWS. This mechanism is configured by prop:
+```
+AWS_S3_WRITING_ENABLED
+```
 ## Chrome Configuration
 
 the file chrome_config.json contains the lighthouse configuration. There's a standard configuration, follows this guide to understando how to personalize: https://github.com/GoogleChrome/lighthouse/blob/master/docs/readme.md
