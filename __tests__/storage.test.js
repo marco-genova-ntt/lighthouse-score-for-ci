@@ -1,5 +1,5 @@
 import * as utility from '../app/utility';
-import StoreManager from '../app/storage';
+import StoreManager from '../app/StoreManager';
 
 test('check progressive counter', () => {
     const testStore = new StoreManager(utility.getAbsolutePath('dist/__tests__/tmp/.test_storage.json'));

@@ -16,7 +16,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Based on node-storage @see https://www.npmjs.com/package/node-storage
  */
 class StoreManager {
+  /**
+   * Default constructor 
+   * 
+   * @param {*} location local path of the database file
+   */
   constructor(location) {
+    this._location = location;
     this._internalStore = new _nodeStorage.default(location);
   }
   /**

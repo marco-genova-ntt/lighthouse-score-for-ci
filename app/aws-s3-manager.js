@@ -64,6 +64,7 @@ export async function downloadFile (bucketName, keyName, fileName, callBack) {
  * @param {String} bucketName bucket name
  * @param {String} keyName key name for content on AWS S3
  * @param {String} fileName file path onto file system
+ * @param {String} contentType content type of the file
  */
 export function uploadFile (bucketName, keyName, fileName, contentType) {
     fs.readFile(fileName, (err, data) => {
