@@ -6,8 +6,14 @@ import R from 'ramda';
  * Based on node-storage @see https://www.npmjs.com/package/node-storage
  */
 class StoreManager {
-
+    
+    /**
+     * Default constructor 
+     * 
+     * @param {*} location local path of the database file
+     */
     constructor(location) {
+        this._location = location;
         this._internalStore = new Storage(location);
     }
 

@@ -32,17 +32,27 @@ var _path = _interopRequireDefault(require("path"));
 
 var _crypto = _interopRequireDefault(require("crypto"));
 
-var _storage = _interopRequireDefault(require("./storage"));
+var _StoreManager = _interopRequireDefault(require("./StoreManager"));
+
+var _AWSStoreManager = _interopRequireDefault(require("./AWSStoreManager"));
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const store = new _storage.default(getAbsolutePath('.local_storage.json'));
-
 _dotenv.default.config({
   path: _path.default.join(_process.default.cwd(), '.env')
 });
+
+let store; ///XXX implement factory mode
+
+if (bool('AWS_S3_WRITING_ENABLED')) {
+  store = new _AWSStoreManager.default(getAbsolutePath('.local_storage.json'));
+  console.info('storage mode: AWS');
+} else {
+  store = new _StoreManager.default(getAbsolutePath('.local_storage.json'));
+  console.info('storage mode: LOCAL');
+}
 /**
  * Gets a string environment variable by the given name.
  *

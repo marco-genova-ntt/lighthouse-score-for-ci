@@ -5,6 +5,15 @@ import {dispatchSeriesManager} from './allseries/series-manager';
 import {downloadFile, checkExistence} from './aws-s3-manager';
 import PagesProvider from './PagesProvider';
 
+
+//XXX Create PromiseALL to retrive all files from repositories (eg AWS S3) then
+//start the page analysis
+
+/**
+ * Starts analysis of the pages
+ * 
+ * @param {*} pages pages to analyze
+ */
 function startAnalisys(pages) {
     const customManagers = [dispatchMessageManager, dispatchSeriesManager];
 
@@ -28,10 +37,34 @@ function startAnalisys(pages) {
         analyze(pages, customManagers);
     }
 }
-//docker run -e "LIGHTHOUSE_CI_ENV=qa" lighthouse-slack-ci
-const pagesProvider = new PagesProvider();
 
-const context = utility.string('LIGHTHOUSE_CI_ENV', 'prod');
-console.info('LightHouse CI - Environement [',context,']');
-pagesProvider.loadPages();
-pagesProvider.worksOnPages(context, startAnalisys);
+/**
+ * Used to manage the download of 
+ */
+function mainProcess () {
+    const pagesProvider = new PagesProvider();
+    const context = utility.string('LIGHTHOUSE_CI_ENV', 'prod');
+    console.info('LightHouse CI - Environement [',context,']');
+    pagesProvider.loadPages();
+    pagesProvider.worksOnPages(context, startAnalisys);
+}
+
+//XXX improve a factory mode to manage local storage to support utility
+if(utility.bool('AWS_S3_WRITING_ENABLED')) {
+    (async() => {
+        const bucketName = utility.string('AWS_BUCKET_NAME');
+        const storagePath = './.local_storage.json';
+        const dbName = utility.extractFileName(storagePath);
+        let existence = await checkExistence(bucketName, dbName);
+
+        if (existence) {
+            downloadFile(bucketName, dbName, storagePath, () => {
+                mainProcess();            
+            });
+        } else {
+            mainProcess();
+        }
+    })();
+} else {
+  mainProcess();
+}

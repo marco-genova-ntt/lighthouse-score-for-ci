@@ -3,11 +3,21 @@ import process from 'process';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import StoreManager from './storage';
+import StoreManager from './StoreManager';
+import AWSStoreManager from './AWSStoreManager';
 import dotenv from 'dotenv';
 
-const store = new StoreManager(getAbsolutePath('.local_storage.json'));
 dotenv.config({ path: path.join(process.cwd(), '.env')});
+let store;
+
+///XXX implement factory mode
+if(bool('AWS_S3_WRITING_ENABLED')) {
+  store = new AWSStoreManager(getAbsolutePath('.local_storage.json'));
+  console.info('storage mode: AWS');
+} else {
+  store = new StoreManager(getAbsolutePath('.local_storage.json'));
+  console.info('storage mode: LOCAL');
+}
 
 /**
  * Gets a string environment variable by the given name.
