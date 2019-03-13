@@ -279,3 +279,12 @@ export function replaceAll(str, find, replace) {
  * Gets a cloned prop of an object
  */
 export const getClonedProp = R.pipe(R.prop, R.clone);
+
+/**
+ * Adds prefix to file name
+ * 
+ * @param {String} suffix original file name
+ */
+export function fileNameEnvBased(suffix = '') {
+  return `${string('LIGHTHOUSE_CI_ENV','not-defined')}-${suffix}`;
+}
