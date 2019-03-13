@@ -17,7 +17,7 @@ function dispatchMessageManager(processID = '000000', page = '', results) {
     const author = utility.string('AUTHOR', 'Lighthouse Score For Slack');
     const thumbUrl = utility.string('THUMBURL', 'https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png');
     let template = utility.string('AWS_S3_TEMPLATE_RESOURCE');
-    const linkToReport = utility.replace(template, 'processID', processID);
+    const linkToReport = utility.replace(template, 'processID', utility.fileNameEnvBased(`${processID}.html`));
     let message;
 
     if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {

@@ -19,7 +19,7 @@ import R from 'ramda';
 export function defaultLighthouseManager(processID, page, results, chainManagers) {
   const html = ReportGenerator.generateReportHtml(results);
   const basePath = utility.getAbsolutePath(utility.string("REPORT_DIR", "./_reports"));
-  const keyName = `${processID}.html`;
+  const keyName = utility.fileNameEnvBased(`${processID}.html`);
   const filePath = path.join(basePath, keyName);
   
   utility.mkDirByPathSync(basePath);
@@ -38,7 +38,7 @@ export function defaultLighthouseManager(processID, page, results, chainManagers
           .replace(`"lh-root lh-vars"`, `"lh-root lh-vars lh-devtools"`)
           .replace(`<title>Lighthouse Report`, `<title>DevTools Lighthouse Report`)
 
-    const devtoolsFilePath = path.join(basePath, `${processID}.z.devtools.html`);
+    const devtoolsFilePath = path.join(basePath, utility.fileNameEnvBased(`${processID}.z.devtools.html`));
     fs.writeFileSync(devtoolsFilePath, devtoolshtml, {encoding: 'utf-8'});
   }
 

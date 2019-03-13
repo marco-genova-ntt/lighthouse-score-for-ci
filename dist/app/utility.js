@@ -20,6 +20,7 @@ exports.createHash = createHash;
 exports.nowUTC = nowUTC;
 exports.escapeRegExp = escapeRegExp;
 exports.replaceAll = replaceAll;
+exports.fileNameEnvBased = fileNameEnvBased;
 exports.getClonedProp = exports.lookup = exports.concatAll = void 0;
 
 var _ramda = _interopRequireDefault(require("ramda"));
@@ -340,5 +341,15 @@ function replaceAll(str, find, replace) {
 
 
 const getClonedProp = _ramda.default.pipe(_ramda.default.prop, _ramda.default.clone);
+/**
+ * Adds prefix to file name
+ * 
+ * @param {String} suffix original file name
+ */
+
 
 exports.getClonedProp = getClonedProp;
+
+function fileNameEnvBased(suffix = '') {
+  return `${string('LIGHTHOUSE_CI_ENV', 'not-defined')}-${suffix}`;
+}

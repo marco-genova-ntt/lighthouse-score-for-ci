@@ -89,3 +89,9 @@ test('clone prop', () => {
     expect(utility.getClonedProp("prop2",refObjet)).not.toBeUndefined();
     expect(utility.getClonedProp("prop2",refObjet)).toEqual("value2");
 });
+
+test('fileName environment based', () => {
+    process.env['LIGHTHOUSE_CI_ENV'] = 'qa';
+    expect(utility.fileNameEnvBased('check')).toEqual('qa-check');
+    expect(utility.fileNameEnvBased()).toEqual('qa-');
+});

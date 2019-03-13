@@ -39,7 +39,7 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
   const html = _reportGenerator.default.generateReportHtml(results);
 
   const basePath = utility.getAbsolutePath(utility.string("REPORT_DIR", "./_reports"));
-  const keyName = `${processID}.html`;
+  const keyName = utility.fileNameEnvBased(`${processID}.html`);
 
   const filePath = _path.default.join(basePath, keyName);
 
@@ -59,7 +59,7 @@ function defaultLighthouseManager(processID, page, results, chainManagers) {
   if (utility.bool("REPORT_EXTRA_STYLE", false)) {
     const devtoolshtml = html.replace(`"lh-root lh-vars"`, `"lh-root lh-vars lh-devtools"`).replace(`<title>Lighthouse Report`, `<title>DevTools Lighthouse Report`);
 
-    const devtoolsFilePath = _path.default.join(basePath, `${processID}.z.devtools.html`);
+    const devtoolsFilePath = _path.default.join(basePath, utility.fileNameEnvBased(`${processID}.z.devtools.html`));
 
     _fs.default.writeFileSync(devtoolsFilePath, devtoolshtml, {
       encoding: 'utf-8'

@@ -81,7 +81,7 @@ function transformEntry(performances) {
     env: performances.environment,
     text: `Analysis Run ${performances.processID} on [${performances.date}]`,
     trend: template.replace('{hashcode}', performances.key),
-    report: template.replace('{hashcode}', performances.processID),
+    report: template.replace('{hashcode}', utility.fileNameEnvBased(`${performances.processID}`)),
     refEnv: performances.url,
     values: (0, _serieReport.remapPerformances)(performances),
     date: performances.date
