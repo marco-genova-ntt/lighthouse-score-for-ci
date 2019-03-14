@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.realoadStorageDatabase = realoadStorageDatabase;
 exports.string = string;
 exports.number = number;
 exports.bool = bool;
@@ -45,15 +46,23 @@ _dotenv.default.config({
   path: _path.default.join(_process.default.cwd(), '.env')
 });
 
-let store; ///XXX implement factory mode
+let store;
+/**
+ * Realoads storage from fileSystem
+ */
 
-if (bool('AWS_S3_WRITING_ENABLED')) {
-  store = new _AWSStoreManager.default(getAbsolutePath('.local_storage.json'));
-  console.info('storage mode: AWS');
-} else {
-  store = new _StoreManager.default(getAbsolutePath('.local_storage.json'));
-  console.info('storage mode: LOCAL');
+function realoadStorageDatabase() {
+  ///XXX implement factory mode
+  if (bool('AWS_S3_WRITING_ENABLED')) {
+    store = new _AWSStoreManager.default(getAbsolutePath('.local_storage.json'));
+    console.info('storage mode: AWS');
+  } else {
+    store = new _StoreManager.default(getAbsolutePath('.local_storage.json'));
+    console.info('storage mode: LOCAL');
+  }
 }
+
+realoadStorageDatabase();
 /**
  * Gets a string environment variable by the given name.
  *
@@ -62,7 +71,6 @@ if (bool('AWS_S3_WRITING_ENABLED')) {
  *
  * @return {String} The value.
  */
-
 
 function string(name, defaultVal = '') {
   return _process.default.env[name] || defaultVal;
