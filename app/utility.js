@@ -10,14 +10,21 @@ import dotenv from 'dotenv';
 dotenv.config({ path: path.join(process.cwd(), '.env')});
 let store;
 
-///XXX implement factory mode
-if(bool('AWS_S3_WRITING_ENABLED')) {
-  store = new AWSStoreManager(getAbsolutePath('.local_storage.json'));
-  console.info('storage mode: AWS');
-} else {
-  store = new StoreManager(getAbsolutePath('.local_storage.json'));
-  console.info('storage mode: LOCAL');
+/**
+ * Realoads storage from fileSystem
+ */
+export function realoadStorageDatabase() {
+  ///XXX implement factory mode
+  if(bool('AWS_S3_WRITING_ENABLED')) {
+    store = new AWSStoreManager(getAbsolutePath('.local_storage.json'));
+    console.info('storage mode: AWS');
+  } else {
+    store = new StoreManager(getAbsolutePath('.local_storage.json'));
+    console.info('storage mode: LOCAL');
+  }
 }
+
+realoadStorageDatabase();
 
 /**
  * Gets a string environment variable by the given name.
