@@ -4,6 +4,12 @@ import {dispatchMessageManager} from './slack-emitter';
 import {dispatchSeriesManager} from './allseries/series-manager';
 import {downloadFile, checkExistence} from './aws-s3-manager';
 import PagesProvider from './PagesProvider';
+import process from 'process';
+
+//XXX workaround to manage errors not caught, correct the behavior 
+//when you see the trace in the log
+process.on('uncaughtException', utility.manageGenericError); 
+process.on('unhandledRejection', utility.manageGenericError);
 
 /**
  * Starts analysis of the pages

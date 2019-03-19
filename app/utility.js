@@ -7,6 +7,8 @@ import StoreManager from './StoreManager';
 import AWSStoreManager from './AWSStoreManager';
 import dotenv from 'dotenv';
 
+export const EXTI_CODE_ERROR_NOT_MANAGED = 31;
+
 dotenv.config({ path: path.join(process.cwd(), '.env')});
 let store;
 
@@ -294,4 +296,17 @@ export const getClonedProp = R.pipe(R.prop, R.clone);
  */
 export function fileNameEnvBased(suffix = '') {
   return `${string('LIGHTHOUSE_CI_ENV','not-defined')}-${suffix}`;
+}
+
+/**
+ * Manages the error not cought in the correct way.
+ * PLEASE correct the behavior if you see trace in the log
+ * 
+ * @param {Error} err error information
+ */
+export function manageGenericError(err) {
+  console.error('WARNING NOT MANAGED ERROR!!! PLEASE CORRECT!!!', err);
+  if (err) {
+    process.exit(EXTI_CODE_ERROR_NOT_MANAGED);
+  }
 }

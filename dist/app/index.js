@@ -12,15 +12,24 @@ var _awsS3Manager = require("./aws-s3-manager");
 
 var _PagesProvider = _interopRequireDefault(require("./PagesProvider"));
 
+var _process = _interopRequireDefault(require("process"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
+//XXX workaround to manage errors not caught, correct the behavior 
+//when you see the trace in the log
+_process.default.on('uncaughtException', utility.manageGenericError);
+
+_process.default.on('unhandledRejection', utility.manageGenericError);
 /**
  * Starts analysis of the pages
  * 
  * @param {*} pages pages to analyze
  */
+
+
 function startAnalisys(pages) {
   const customManagers = [_slackEmitter.dispatchMessageManager, _seriesManager.dispatchSeriesManager]; //XXX Imporve the design of acquiring database, adding a clear lifecycle 
 
