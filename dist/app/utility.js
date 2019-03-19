@@ -22,7 +22,8 @@ exports.nowUTC = nowUTC;
 exports.escapeRegExp = escapeRegExp;
 exports.replaceAll = replaceAll;
 exports.fileNameEnvBased = fileNameEnvBased;
-exports.getClonedProp = exports.lookup = exports.concatAll = void 0;
+exports.manageGenericError = manageGenericError;
+exports.getClonedProp = exports.lookup = exports.concatAll = exports.EXTI_CODE_ERROR_NOT_MANAGED = void 0;
 
 var _ramda = _interopRequireDefault(require("ramda"));
 
@@ -41,6 +42,9 @@ var _AWSStoreManager = _interopRequireDefault(require("./AWSStoreManager"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const EXTI_CODE_ERROR_NOT_MANAGED = 31;
+exports.EXTI_CODE_ERROR_NOT_MANAGED = EXTI_CODE_ERROR_NOT_MANAGED;
 
 _dotenv.default.config({
   path: _path.default.join(_process.default.cwd(), '.env')
@@ -360,4 +364,19 @@ exports.getClonedProp = getClonedProp;
 
 function fileNameEnvBased(suffix = '') {
   return `${string('LIGHTHOUSE_CI_ENV', 'not-defined')}-${suffix}`;
+}
+/**
+ * Manages the error not cought in the correct way.
+ * PLEASE correct the behavior if you see trace in the log
+ * 
+ * @param {Error} err error information
+ */
+
+
+function manageGenericError(err) {
+  console.error('WARNING NOT MANAGED ERROR!!! PLEASE CORRECT!!!', err);
+
+  if (err) {
+    _process.default.exit(EXTI_CODE_ERROR_NOT_MANAGED);
+  }
 }

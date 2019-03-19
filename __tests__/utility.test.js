@@ -95,3 +95,7 @@ test('fileName environment based', () => {
     expect(utility.fileNameEnvBased('check')).toEqual('qa-check');
     expect(utility.fileNameEnvBased()).toEqual('qa-');
 });
+
+test('manageGenericError', () => {
+    utility.manageGenericError();
+});
