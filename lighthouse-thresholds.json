@@ -1,0 +1,9 @@
+{   
+    "thresholds": {
+      "performance": 5.0,
+      "pwa": 5.0,
+      "bestpractices": 5.0,
+      "seo": 5.0,
+      "accessibility": 5.0
+    }
+}

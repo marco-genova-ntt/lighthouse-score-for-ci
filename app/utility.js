@@ -114,6 +114,7 @@ export function extractFileName (relativePath = '') {
  * Parameter is optional an internal store is used
  * 
  * @param {StoreManager} specificStore optional store
+ * @deprecated @see improveCounter
  */
 export function getProgressiveCounter(specificStore) {
     const storeToUse = specificStore?specificStore:store;
@@ -309,4 +310,49 @@ export function manageGenericError(err) {
   if (err) {
     process.exit(EXTI_CODE_ERROR_NOT_MANAGED);
   }
+}
+
+/**
+ * Imporve a counter (+1) in the StoreManager
+ * 
+ * @param {String} counter counter identifier
+ * @param {StoreManager} specificStore specific store, if null the default will be used
+ */
+export function improveCounter(counter, specificStore) {
+  if (counter) {
+    const storeToUse = specificStore?specificStore:store;
+    return storeToUse.setValueToStorage(counter, R.inc(storeToUse.getValueFromStorage(counter, 0)));
+  }
+  
+  return 0;
+}
+
+/**
+ * Resets to 0 the value
+ * 
+ * @param {String} counter counter identifier
+ * @param {StoreManager} specificStore specific store, if null the default will be used
+ */
+export function resetCounter (counter, specificStore) {
+  if (counter) {
+    const storeToUse = specificStore?specificStore:store;
+    return storeToUse.setValueToStorage(counter, 0);
+  }
+
+  return 0;
+}
+
+/**
+ * Gets the value of counter
+ *  
+ * @param {String} counter counter identifier
+ * @param {StoreManager} specificStore specific store, if null the default will be used
+ */
+export function getCounter (counter, specificStore) {
+  if (counter) {
+    const storeToUse = specificStore?specificStore:store;
+    return storeToUse.getValueFromStorage(counter, 0);
+  }
+
+  return 0;
 }
