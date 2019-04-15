@@ -14,6 +14,8 @@ var _PagesProvider = _interopRequireDefault(require("./PagesProvider"));
 
 var _process = _interopRequireDefault(require("process"));
 
+var _thresholdsManager = require("./thresholds/thresholds-manager");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -31,7 +33,12 @@ _process.default.on('unhandledRejection', utility.manageGenericError);
 
 
 function startAnalisys(pages) {
-  const customManagers = [_slackEmitter.dispatchMessageManager, _seriesManager.dispatchSeriesManager]; //XXX Imporve the design of acquiring database, adding a clear lifecycle 
+  const customManagers = [_slackEmitter.dispatchMessageManager, _seriesManager.dispatchSeriesManager];
+
+  if (utility.bool('THRESHOLDS_EVALUATION_ENABLED')) {
+    customManagers.push(_thresholdsManager.dispatchThresholdsEvaluation);
+  } //XXX Imporve the design of acquiring database, adding a clear lifecycle 
+
 
   if (utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
     (async () => {

@@ -23,6 +23,9 @@ exports.escapeRegExp = escapeRegExp;
 exports.replaceAll = replaceAll;
 exports.fileNameEnvBased = fileNameEnvBased;
 exports.manageGenericError = manageGenericError;
+exports.improveCounter = improveCounter;
+exports.resetCounter = resetCounter;
+exports.getCounter = getCounter;
 exports.getClonedProp = exports.lookup = exports.concatAll = exports.EXTI_CODE_ERROR_NOT_MANAGED = void 0;
 
 var _ramda = _interopRequireDefault(require("ramda"));
@@ -162,6 +165,7 @@ function extractFileName(relativePath = '') {
  * Parameter is optional an internal store is used
  * 
  * @param {StoreManager} specificStore optional store
+ * @deprecated @see improveCounter
  */
 
 
@@ -379,4 +383,52 @@ function manageGenericError(err) {
   if (err) {
     _process.default.exit(EXTI_CODE_ERROR_NOT_MANAGED);
   }
+}
+/**
+ * Imporve a counter (+1) in the StoreManager
+ * 
+ * @param {String} counter counter identifier
+ * @param {StoreManager} specificStore specific store, if null the default will be used
+ */
+
+
+function improveCounter(counter, specificStore) {
+  if (counter) {
+    const storeToUse = specificStore ? specificStore : store;
+    return storeToUse.setValueToStorage(counter, _ramda.default.inc(storeToUse.getValueFromStorage(counter, 0)));
+  }
+
+  return 0;
+}
+/**
+ * Resets to 0 the value
+ * 
+ * @param {String} counter counter identifier
+ * @param {StoreManager} specificStore specific store, if null the default will be used
+ */
+
+
+function resetCounter(counter, specificStore) {
+  if (counter) {
+    const storeToUse = specificStore ? specificStore : store;
+    return storeToUse.setValueToStorage(counter, 0);
+  }
+
+  return 0;
+}
+/**
+ * Gets the value of counter
+ *  
+ * @param {String} counter counter identifier
+ * @param {StoreManager} specificStore specific store, if null the default will be used
+ */
+
+
+function getCounter(counter, specificStore) {
+  if (counter) {
+    const storeToUse = specificStore ? specificStore : store;
+    return storeToUse.getValueFromStorage(counter, 0);
+  }
+
+  return 0;
 }

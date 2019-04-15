@@ -47,8 +47,14 @@ SLACK_TOKEN=xoxb-.....,
 #Slack channel identifier, use Web API simulator to extract this value (https://api.slack.com/methods/conversations.list)
 SLACK_CHANNEL_ID=C6H41XTRU
 
-#Base api url, use this for the actual version of api
+#SLACK MODE TYPE (WEB (Incoming webbook, default) or BOT)
+SLACK_MODE=WEB
+
+#Base api url, use this for the actual version of api (Only for BOT mode)
 SLACK_BASE_API=https://slack.com/api/{method}?token={token}&pretty=1
+
+#Slack Incoming Webhook (@see https://api.slack.com/incoming-webhooks)
+SLACK_WEB_HOOK=https://hooks.slack.com/services/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
 
 #Write on AWS (true enable/false disable), guide the usage of .local_storage.json on AWS
 AWS_S3_WRITING_ENABLED=true
@@ -87,6 +93,9 @@ SERIES_TEMAPLTE_INDEX_FILE=./templates/series/index.txt
 
 #Sets the env to select a sets of page
 LIGHTHOUSE_CI_ENV=qa
+
+#Thresholds definition, the thresholds are in a specific file in the roor of the project
+THRESHOLDS_EVALUATION_ENABLED=true
 ```
 
 ## Define pages.json
@@ -138,6 +147,24 @@ Reference to slack guide: https://api.slack.com/slack-apps
 ### Create a bucket on Amazon Web Services (AWS) S3
 
 This guide can be very helpful to create a bucket specific for this scenario: https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
+
+### Define thresholds
+
+Compile the file **lighthouse-thresholds.json** in the root of the project.
+For every performance index, define the minimun value to pass the test.
+The value must be a double value between 0 and 100.
+
+```
+{   
+    "thresholds": {
+      "performance": 5.0,
+      "pwa": 5.0,
+      "bestpractices": 5.0,
+      "seo": 5.0,
+      "accessibility": 5.0
+    }
+}
+```
 
 ## Notes
 

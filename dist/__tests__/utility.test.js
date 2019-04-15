@@ -2,6 +2,8 @@
 
 var utility = _interopRequireWildcard(require("../app/utility"));
 
+var _StoreManager = _interopRequireDefault(require("../app/StoreManager"));
+
 var _process = _interopRequireDefault(require("process"));
 
 var _fs = _interopRequireDefault(require("fs"));
@@ -93,4 +95,17 @@ test('fileName environment based', () => {
 });
 test('manageGenericError', () => {
   utility.manageGenericError();
+});
+test('Generic counter', () => {
+  const testStore = new _StoreManager.default(utility.getAbsolutePath('dist/__tests__/tmp/.test_storage_utility.json'));
+  const TEST_ID = 'TEST_ID';
+  expect(utility.getCounter()).toBe(0);
+  expect(utility.getCounter(TEST_ID, testStore)).toBe(0);
+  expect(utility.improveCounter(TEST_ID, testStore)).toBe(1);
+  expect(utility.improveCounter('FAKE', testStore)).toBe(1);
+  expect(utility.improveCounter(TEST_ID, testStore)).toBe(2);
+  expect(utility.improveCounter(TEST_ID, testStore)).toBe(3);
+  expect(utility.getCounter(TEST_ID, testStore)).toBe(3);
+  expect(utility.resetCounter(TEST_ID, testStore)).toBe(0);
+  expect(utility.getCounter(TEST_ID, testStore)).toBe(0);
 });

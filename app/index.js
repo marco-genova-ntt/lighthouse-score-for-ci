@@ -5,6 +5,7 @@ import {dispatchSeriesManager} from './allseries/series-manager';
 import {downloadFile, checkExistence} from './aws-s3-manager';
 import PagesProvider from './PagesProvider';
 import process from 'process';
+import {dispatchThresholdsEvaluation} from './thresholds/thresholds-manager';
 
 //XXX workaround to manage errors not caught, correct the behavior 
 //when you see the trace in the log
@@ -18,6 +19,10 @@ process.on('unhandledRejection', utility.manageGenericError);
  */
 function startAnalisys(pages) {
     const customManagers = [dispatchMessageManager, dispatchSeriesManager];
+
+    if (utility.bool('THRESHOLDS_EVALUATION_ENABLED')) {
+        customManagers.push(dispatchThresholdsEvaluation);
+    }
 
     //XXX Imporve the design of acquiring database, adding a clear lifecycle 
     if(utility.bool('SERIES_SERVICE_DATABASE_FILE_ON_AWS')) {
